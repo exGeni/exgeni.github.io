@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fa">
+  <meta name="description" content="Open-source work by Evgenii Lopatin (exGeni) across AI agent infrastructure, developer tooling and automation.">
+  <title>Evgenii Lopatin — Open-source work</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="identity" href="#top" aria-label="Evgenii Lopatin home">
+      <span class="identity-mark">e<span>.</span></span>
+      <span><strong>Evgenii Lopatin</strong><small>@exGeni</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#work">Selected work</a>
+      <a href="#approach">Approach</a>
+      <a class="nav-github" href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub profile <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> Independent open-source contributor</p>
+        <h1>Making AI systems<br><em>more dependable.</em></h1>
+        <p class="hero-intro">I investigate failures across agent infrastructure and developer tools, trace them to their source, and work with maintainers to get practical fixes into upstream releases.</p>
+        <div class="hero-links">
+          <a class="text-link" href="#work">Explore selected work <span aria-hidden="true">↓</span></a>
+          <a class="quiet-link" href="https://github.com/exGeni" target="_blank" rel="noreferrer">github.com/exGeni ↗</a>
+        </div>
+      </div>
+      <aside class="hero-ledger" aria-label="Contribution summary">
+        <div class="ledger-top"><span>Upstream activity</span><span class="live-mark">Snapshot · 18 Nov 2026</span></div>
+        <div class="big-stat"><strong id="total-items">207</strong><span>tracked items<br>across four projects</span></div>
+        <div class="ledger-rule"></div>
+        <div class="stat-pair"><div><strong id="issue-total">189</strong><span>Issues</span></div><div><strong id="pr-total">18</strong><span>Pull requests</span></div></div>
+        <div class="adoption-line"><span class="adoption-number" id="adopted-total">15</span><span>PR contributions adopted upstream through maintainer follow-ups</span></div>
+      </aside>
+    </section>
+
+    <section class="activity-section">
+      <div class="wrap activity-grid">
+        <div class="section-intro">
+          <p class="eyebrow">The work, over time</p>
+          <h2>Activity is<br>building.</h2>
+          <p>Issue reports and pull requests opened each month. November is month-to-date.</p>
+          <div class="mini-legend"><span><i class="legend-issue"></i> Issues</span><span><i class="legend-pr"></i> Pull requests</span></div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-heading"><span>Monthly activity</span><span class="chart-period">Jun — Nov 2026</span></div>
+          <div id="monthly-chart" class="monthly-chart" role="img" aria-label="Stacked monthly bar chart of issues and pull requests"></div>
+          <div class="chart-foot"><span>Issues + pull requests opened</span><span>Nov 2026 through the 18th</span></div>
+          <div class="cumulative-block"><div class="chart-heading"><span>Cumulative activity</span><strong id="cumulative-total">207</strong></div><div id="cumulative-chart" class="cumulative-chart" role="img" aria-label="Cumulative contribution activity over time"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap metrics-section" aria-label="Contribution outcomes">
+      <div class="metric-block"><span class="metric-label">Adopted upstream</span><strong id="adopted-metric">15</strong><small>confirmed in maintainer discussions</small></div>
+      <div class="metric-block"><span class="metric-label">Awaiting follow-up</span><strong id="awaiting-metric">2</strong><small>maintainer work planned or in progress</small></div>
+      <div class="metric-block"><span class="metric-label">Open issues</span><strong id="open-issues">36</strong><small>across the four repositories</small></div>
+      <div class="metric-block"><span class="metric-label">Open pull requests</span><strong id="open-prs">1</strong><small>currently under maintainer review</small></div>
+    </section>
+
+    <section class="wrap outcomes-section" aria-label="Pull request outcomes">
+      <div class="outcomes-heading"><span>Pull request outcomes</span><span id="outcome-summary">15 adopted · 2 awaiting follow-up · 1 not adopted</span></div>
+      <div id="outcome-track" class="outcome-track" aria-label="15 adopted, 2 awaiting follow-up, 1 not adopted"><i id="outcome-adopted" class="outcome-adopted"></i><i id="outcome-awaiting" class="outcome-awaiting"></i><i id="outcome-not-adopted" class="outcome-not-adopted"></i></div>
+      <div class="outcome-legend"><span><i class="legend-adopted"></i> Adopted upstream</span><span><i class="legend-awaiting"></i> Awaiting follow-up</span><span><i class="legend-not-adopted"></i> Not adopted</span></div>
+    </section>
+
+    <section class="wrap distribution-section">
+      <div class="distribution-copy">
+        <p class="eyebrow">Where I contribute</p>
+        <h2>Four projects.<br>Connected problems.</h2>
+        <p>The work sits where agent runtimes, memory systems, developer workflows and integrations meet.</p>
+      </div>
+      <div class="distribution-chart">
+        <div class="chart-heading"><span>Items by project</span><span class="chart-period">Issues + PRs</span></div>
+        <div id="project-chart" class="project-chart" role="img" aria-label="Horizontal bars showing contribution totals by project"></div>
+      </div>
+    </section>
+
+    <section class="wrap domains-section">
+      <div class="section-heading-row"><div><p class="eyebrow">Areas of work</p><h2>What the contributions address</h2></div><p class="heading-note">Grouped by problem domain, not by tool.</p></div>
+      <div class="domain-list">
+        <article class="domain-row"><span class="domain-index">01</span><div><h3>Reliability & resource measurement</h3><p>Monitoring, process lifecycle, memory pressure and failure handling.</p></div><span class="domain-project">AlphaClaw</span></article>
+        <article class="domain-row"><span class="domain-index">02</span><div><h3>State, memory & data integrity</h3><p>Source boundaries, migrations, session attribution and safe synchronization.</p></div><span class="domain-project">GBrain</span></article>
+        <article class="domain-row"><span class="domain-index">03</span><div><h3>Agent workflows & environment boundaries</h3><p>Tool orchestration, configuration isolation and predictable developer workflows.</p></div><span class="domain-project">GStack</span></article>
+        <article class="domain-row"><span class="domain-index">04</span><div><h3>Performance investigation</h3><p>Reproducible profiling, regression analysis and evidence-led issue reports.</p></div><span class="domain-project">OpenClaw</span></article>
+      </div>
+    </section>
+
+    <section id="work" class="work-section">
+      <div class="wrap">
+        <div class="section-heading-row work-heading"><div><p class="eyebrow">Selected contributions</p><h2>Problems worth fixing.</h2></div><p class="heading-note">A selection of upstream work with concrete evidence and outcomes.</p></div>
+        <div class="case-list">
+          <article class="case-row">
+            <div class="case-meta"><span class="case-area">Resource monitoring</span><span class="case-project">AlphaClaw</span><span class="case-status adopted">Adopted upstream</span></div>
+            <div class="case-content"><h3>A false critical-memory alert, traced to page cache.</h3><p>The watchdog treated inactive page cache as active container pressure: the same cgroup read 93.8% used while its working set was 54.3%. I documented the measurement, proposed the correct cgroup metric and submitted the regression-tested change.</p><div class="case-result">The maintainer ported the change unchanged to <a href="https://github.com/garrytan/alphaclaw/pull/158" target="_blank" rel="noreferrer">#158</a>, shipped in v0.10.19, with credit.</div><div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/125" target="_blank" rel="noreferrer">Issue #125 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/132" target="_blank" rel="noreferrer">My PR #132 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/158" target="_blank" rel="noreferrer">Landed #158 ↗</a></div></div>
+          </article>
+          <article class="case-row">
+            <div class="case-meta"><span class="case-area">State migration</span><span class="case-project">AlphaClaw</span><span class="case-status adopted">Adopted upstream</span></div>
+            <div class="case-content"><h3>Restoring access to credentials after an upstream schema migration.</h3><p>OpenClaw moved the shared auth store into <code>config_machine_state</code> at schema v13, while AlphaClaw still queried tables that had been dropped. The result: credentials appeared disconnected and writes failed. I mapped the schema boundary and proposed a fail-closed, version-aware read/write path.</p><div class="case-result">The reliability wave delivered the fix in <a href="https://github.com/garrytan/alphaclaw/pull/114" target="_blank" rel="noreferrer">#114</a>, with schema-aware and concurrency coverage.</div><div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/88" target="_blank" rel="noreferrer">Issue #88 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/89" target="_blank" rel="noreferrer">My PR #89 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/114" target="_blank" rel="noreferrer">Landed #114 ↗</a></div></div>
+          </article>
+          <article class="case-row">
+            <div class="case-meta"><span class="case-area">Channel ownership</span><span class="case-project">AlphaClaw</span><span class="case-status adopted">Adopted upstream</span></div>
+            <div class="case-content"><h3>Preventing boot-time deletion of channels AlphaClaw did not own.</h3><p>Startup synchronization could remove a WhatsApp channel configured natively in OpenClaw when an AlphaClaw environment variable was absent. The fix made removal respect the channel's <code>sync: false</code> boundary while preserving managed-channel cleanup.</p><div class="case-result">Four original commits landed in <a href="https://github.com/garrytan/alphaclaw/pull/302" target="_blank" rel="noreferrer">#302</a>; the maintainer credited the contribution.</div><div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/292" target="_blank" rel="noreferrer">Issue #292 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/301" target="_blank" rel="noreferrer">My PR #301 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/302" target="_blank" rel="noreferrer">Landed #302 ↗</a></div></div>
+          </article>
+          <article class="case-row">
+            <div class="case-meta"><span class="case-area">Environment isolation</span><span class="case-project">GStack</span><span class="case-status adopted">Adopted upstream</span></div>
+            <div class="case-content"><h3>Making GStack respect a non-default GBrain home.</h3><p>Two GStack helpers read configuration from <code>$HOME/.gbrain</code> instead of resolving <code>GBRAIN_HOME</code>. On machines with a separately located brain, this could route setup and synchronization to the wrong configuration.</p><div class="case-result">The maintainer rebuilt the fix in <a href="https://github.com/garrytan/gstack/pull/4343" target="_blank" rel="noreferrer">#4343</a>, merged it and credited me as co-author.</div><div class="case-links"><a href="https://github.com/garrytan/gstack/issues/4325" target="_blank" rel="noreferrer">Issue #4325 ↗</a><a href="https://github.com/garrytan/gstack/pull/4326" target="_blank" rel="noreferrer">My PR #4326 ↗</a><a href="https://github.com/garrytan/gstack/pull/4343" target="_blank" rel="noreferrer">Landed #4343 ↗</a></div></div>
+          </article>
+          <article class="case-row">
+            <div class="case-meta"><span class="case-area">Session attribution</span><span class="case-project">GBrain</span><span class="case-status adopted">Adopted upstream</span></div>
+            <div class="case-content"><h3>Distinguishing the owner's Remote Control session from agent work.</h3><p>Claude Code Remote Control sessions could be classified as agent-launched, corrupting the attribution of captured activity. The fix stops detection at the Remote Control process while preserving worker-session attribution.</p><div class="case-result">Rebuilt in GBrain fix wave <a href="https://github.com/garrytan/gbrain/pull/8971" target="_blank" rel="noreferrer">#8971</a>, then shipped to master with contributor credit.</div><div class="case-links"><a href="https://github.com/garrytan/gbrain/issues/8080" target="_blank" rel="noreferrer">Issue #8080 ↗</a><a href="https://github.com/garrytan/gbrain/pull/8892" target="_blank" rel="noreferrer">My PR #8892 ↗</a><a href="https://github.com/garrytan/gbrain/pull/8971" target="_blank" rel="noreferrer">Landed #8971 ↗</a></div></div>
+          </article>
+          <article class="case-row">
+            <div class="case-meta"><span class="case-area">Performance profiling</span><span class="case-project">OpenClaw</span><span class="case-status reviewed">P1 issue · reviewed</span></div>
+            <div class="case-content"><h3>Tracing a plugin-loading regression measured in minutes.</h3><p>A reproducible report isolated repeated linear scans in native plugin namespace lookup. On OpenClaw 2026.9.8, the reported profile attributed 148 seconds of self time to the lookup; adding native prebuilds increased a slim plugin's load time from about 39 to 239 seconds.</p><div class="case-result">The issue received a P1 rating and a focused repair recommendation. I do not count it as fixed: the available record does not confirm a landed implementation.</div><div class="case-links"><a href="https://github.com/openclaw/openclaw/issues/165195" target="_blank" rel="noreferrer">Issue #165195 ↗</a></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="approach" class="wrap approach-section">
+      <div><p class="eyebrow">How I contribute</p><h2>Evidence before<br>assumptions.</h2></div>
+      <div class="approach-copy"><p>I focus on problems that cross component boundaries: a configuration contract that drifts, a state migration that breaks a consumer, or a runtime path whose cost is invisible until measured.</p><ol><li><span>01</span> Reproduce the behaviour in a real or isolated environment.</li><li><span>02</span> Trace the contract across code, configuration and runtime.</li><li><span>03</span> Quantify impact and submit a focused report or patch.</li><li><span>04</span> Verify the outcome with maintainers and follow the change upstream.</li></ol></div>
+    </section>
+
+    <section class="method-note"><div class="wrap method-inner"><p><strong>How the numbers are counted.</strong> The activity totals include authored issues and pull requests in the four listed upstream repositories, based on their GitHub creation dates. “Adopted upstream” is a separate, manually verified outcome: it includes maintainer follow-up PRs, fix waves and credited commits when the original PR was closed as superseded. Closed does not automatically mean accepted. November activity is through 18 November 2026.</p><a href="https://github.com/exGeni" target="_blank" rel="noreferrer">View the full public record on GitHub ↗</a></div></section>
+  </main>
+
+  <footer class="wrap site-footer"><div><strong>Evgenii Lopatin</strong><span>Open-source work · AI agent infrastructure · Developer tooling</span></div><a href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub ↗</a><small>© 2026</small></footer>
+  <script src="app.js" defer></script>
+</body>
+</html>
