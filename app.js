@@ -47,8 +47,22 @@ function renderCumulative(data) {
 function renderProjects(projects) {
   const root = el('project-chart');
   if (!root) return;
-  const max = Math.max(...projects.map(x => x.total), 1);
-  root.innerHTML = projects.map(p => `<div class="project-row"><span class="project-name">${p.name}</span><span class="project-track"><i class="project-fill" style="width:${(p.total / max) * 100}%"></i></span><span class="project-value">${p.total}</span></div>`).join('');
+  const colors = ['#315f9f', '#6485ad', '#287b73', '#a2afbf'];
+  const total = projects.reduce((sum, project) => sum + project.total, 0);
+  const radius = 64;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
+  const segments = projects.map((project, index) => {
+    const length = total ? (project.total / total) * circumference : 0;
+    const segment = `<circle class="donut-segment" cx="90" cy="90" r="${radius}" stroke="${colors[index % colors.length]}" stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}"></circle>`;
+    offset += length;
+    return segment;
+  }).join('');
+  const legend = projects.map((project, index) => {
+    const share = total ? Math.round((project.total / total) * 100) : 0;
+    return `<div class="project-legend-row"><i class="project-swatch" style="background:${colors[index % colors.length]}"></i><span class="project-legend-name">${project.name}</span><span class="project-legend-value">${project.total}<small>${share}%</small></span></div>`;
+  }).join('');
+  root.innerHTML = `<div class="project-donut" role="img" aria-label="Donut chart: ${projects.map(p => `${p.name} ${p.total}`).join(', ')}"><svg viewBox="0 0 180 180" aria-hidden="true"><circle class="donut-track" cx="90" cy="90" r="${radius}"></circle>${segments}</svg><div class="donut-center"><strong>${total}</strong><span>Total items</span></div></div><div class="project-legend">${legend}</div>`;
 }
 function render(data) {
   const t = data.totals || fallback.totals;
