@@ -222,3 +222,112 @@ code { padding: 1px 4px; background: #e4eaf0; color: #34475d; font-size: .9em; b
   .site-footer span { max-width: 210px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+
+/* Chart layout refinements */
+.monthly-chart {
+  height: 204px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(8px, 2vw, 22px);
+  padding: 15px 4px 10px;
+}
+.month-column {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 16px minmax(0, 1fr) 18px;
+  justify-items: center;
+  align-items: end;
+  gap: 5px;
+}
+.month-total, .month-label { line-height: 1.2; white-space: nowrap; }
+.month-bar { align-self: end; }
+.chart-foot { align-items: flex-start; }
+.project-chart {
+  grid-template-columns: minmax(132px, 180px) minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+  padding-top: 20px;
+}
+.project-donut {
+  position: relative;
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+.project-donut svg { display: block; width: 100%; height: 100%; }
+.donut-track { fill: none; stroke: #edf1f5; stroke-width: 17; }
+.donut-segment {
+  fill: none;
+  stroke-width: 17;
+  stroke-linecap: butt;
+  transform: rotate(-90deg);
+  transform-origin: 90px 90px;
+}
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.donut-center strong {
+  font: 500 34px/.98 var(--serif);
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+.donut-center span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.project-legend { display: grid; gap: 13px; min-width: 0; }
+.project-legend-row {
+  display: grid;
+  grid-template-columns: 9px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+}
+.project-swatch { width: 8px; height: 8px; border-radius: 2px; }
+.project-legend-name { color: #485666; min-width: 0; }
+.project-legend-value { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.project-legend-value small { display: block; color: #8793a0; font-size: 10px; }
+
+@media (max-width: 620px) {
+  .monthly-chart {
+    height: 196px;
+    gap: 6px;
+    padding-inline: 0;
+  }
+  .month-column { gap: 4px; }
+  .month-total, .month-label { font-size: 11px; }
+  .month-bar { width: min(100%, 38px); }
+  .chart-foot {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3px;
+    padding-top: 10px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+  .project-chart {
+    grid-template-columns: minmax(118px, 145px) minmax(0, 1fr);
+    gap: 14px;
+    padding-top: 18px;
+  }
+  .donut-center strong { font-size: 29px; }
+  .project-legend { gap: 11px; }
+  .project-legend-row { grid-template-columns: 8px minmax(0, 1fr) auto; gap: 7px; font-size: 11px; }
+}
+@media (max-width: 360px) {
+  .project-chart { grid-template-columns: 112px minmax(0, 1fr); gap: 10px; }
+  .donut-center strong { font-size: 26px; }
+  .project-legend-row { font-size: 10px; }
+}
