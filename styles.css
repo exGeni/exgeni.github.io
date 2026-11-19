@@ -223,7 +223,6 @@ code { padding: 1px 4px; background: #e4eaf0; color: #34475d; font-size: .9em; b
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
 
-
 /* Project distribution donut chart */
 .project-chart {
   grid-template-columns: minmax(132px, 180px) minmax(0, 1fr);
@@ -282,27 +281,14 @@ code { padding: 1px 4px; background: #e4eaf0; color: #34475d; font-size: .9em; b
 .project-legend-value { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
 .project-legend-value small { display: block; color: #8793a0; font-size: 10px; }
 
+
+/* Mobile-only fix: keep the chart's original appearance and put its note on two lines. */
 @media (max-width: 620px) {
-  /* Keep the monthly chart's original bar layout; only wrap its explanatory text. */
   .chart-foot {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 3px;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 3px;
     padding-top: 10px;
-    font-size: 11px;
     line-height: 1.45;
   }
-  .project-chart {
-    grid-template-columns: minmax(118px, 145px) minmax(0, 1fr);
-    gap: 14px;
-    padding-top: 18px;
-  }
-  .donut-center strong { font-size: 29px; }
-  .project-legend { gap: 11px; }
-  .project-legend-row { grid-template-columns: 8px minmax(0, 1fr) auto; gap: 7px; font-size: 11px; }
-}
-@media (max-width: 360px) {
-  .project-chart { grid-template-columns: 112px minmax(0, 1fr); gap: 10px; }
-  .donut-center strong { font-size: 26px; }
-  .project-legend-row { font-size: 10px; }
 }
