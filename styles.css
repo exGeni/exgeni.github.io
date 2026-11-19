@@ -166,6 +166,12 @@ code { padding: 1px 4px; background: #e4eaf0; color: #34475d; font-size: .9em; b
 .site-footer > a { color: var(--blue); font-size: 12px; }
 @media (max-width: 850px) {
   .wrap { width: min(100% - 42px, var(--max)); }
+  .site-header .identity, nav a, .hero-links a, .case-result a, .case-links a, .method-inner a, .site-footer > a {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
   .hero { grid-template-columns: 1fr; gap: 40px; padding-block: 67px; }
   .hero-ledger { max-width: 520px; }
   .activity-grid { grid-template-columns: 1fr; gap: 25px; }
