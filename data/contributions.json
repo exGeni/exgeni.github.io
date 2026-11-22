@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21T13:29:18.562Z",
+  "generated_at": "2026-11-22T13:23:20.540Z",
   "scope": [
     "garrytan/gbrain",
     "garrytan/gstack",
@@ -10,10 +10,10 @@
     "issues": 189,
     "pull_requests": 18,
     "tracked_items": 207,
-    "open_issues": 36,
-    "closed_issues": 153,
-    "open_pull_requests": 1,
-    "closed_pull_requests": 17
+    "open_issues": 8,
+    "closed_issues": 181,
+    "open_pull_requests": 0,
+    "closed_pull_requests": 18
   },
   "projects": [
     {
