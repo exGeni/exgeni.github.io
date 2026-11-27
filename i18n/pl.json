@@ -72,7 +72,7 @@
   "card.clawhub-package.title": "Pakiet z dokumentacji o niejasnym właścicielu.",
   "card.clawhub-package.problem": "Pakiet ClawHub, do którego odsyłała dokumentacja, nie instalował się.",
   "card.clawhub-package.did": "Odtworzyłem błąd, sprawdziłem rejestr i zgłosiłem, że właściciel pakietu jest niejasny.",
-  "card.clawhub-package.result": "Poprawka maintainerów #8934 wykazała, że aktualizacja mogła zainstalować pakiet obcego konta; tę ścieżkę usunięto, a mnie wskazano jako zgłaszającego problem z właścicielem.",
+  "card.clawhub-package.result": "Poprawka maintainerów #8934 wykazała, że aktualizacja mogła zainstalować pakiet obcego konta; tę ścieżkę usunięto, a mnie wskazano jako zgłaszającego problem z własnością pakietu.",
   "card.case-overwrite.area": "Integralność danych",
   "card.case-overwrite.title": "Zapis mógł po cichu nadpisać inny plik.",
   "card.case-overwrite.problem": "W Windows i macOS niszczony był plik, którego nazwa różniła się tylko wielkością liter.",
