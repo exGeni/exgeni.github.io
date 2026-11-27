@@ -1,7 +1,7 @@
-import english from './i18n/en.mjs?v=6';
-import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=6';
-import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=6';
-import { percentLabel } from './lib/stats.mjs?v=6';
+import english from './i18n/en.mjs?v=7';
+import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=7';
+import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=7';
+import { percentLabel } from './lib/stats.mjs?v=7';
 
 const el = id => document.getElementById(id);
 const narrow = window.matchMedia('(max-width: 620px)');
@@ -204,7 +204,7 @@ function foldDetails() {
 
 /** Repaints the page in one language. Returns false when the dictionary cannot be loaded. */
 async function showLanguage(code) {
-  const url = `i18n/${code}.json?v=6`;
+  const url = `i18n/${code}.json?v=7`;
   try {
     let dictionary = null;
     if (code !== 'en') {
