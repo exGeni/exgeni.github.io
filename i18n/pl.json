@@ -146,6 +146,7 @@
   "method.record": "Pełna publiczna historia na GitHubie ↗",
   "footer.tagline": "Open source · infrastruktura agentów AI · narzędzia programistyczne",
   "project.legionowo-transit": "Bezpłatna komunikacja miejska w Legionowie: odjazdy z przystanków na mapie, na podstawie opublikowanych rozkładów.",
+  "project.neighbor-food": "Sąsiedzi z jednej klatki dzielą się domowym jedzeniem: po zeskanowaniu kodu QR widać, kto co proponuje lub o co prosi. Bez pieniędzy. Link otwiera demo ze zmyślonymi sąsiadami.",
   "unavailable": "Dane niedostępne",
   "snapshot": "Stan na {date}",
   "stale": "Dane nie były odświeżane od kilku dni.",

@@ -143,6 +143,7 @@ export default {
   "method.record": "View the full public record on GitHub ↗",
   "footer.tagline": "Open-source work · AI agent infrastructure · Developer tooling",
   "project.legionowo-transit": "Free city bus departures in Legionowo, stop by stop on a map, built from the published timetables.",
+  "project.neighbor-food": "Neighbours in one building share home cooking: a QR code in the entrance shows who offers or asks for what. No money. The public link is a demo with invented neighbours.",
   "unavailable": "Data unavailable",
   "snapshot": "Snapshot · {date}",
   "stale": "The data has not refreshed for a few days.",
