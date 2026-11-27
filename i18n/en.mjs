@@ -69,7 +69,7 @@ export default {
   "card.clawhub-package.title": "A documented package of unclear ownership.",
   "card.clawhub-package.problem": "The ClawHub package that the documentation pointed to did not install.",
   "card.clawhub-package.did": "I reproduced the failure, inspected the registry and reported that the ownership was unclear.",
-  "card.clawhub-package.result": "The maintainers' fix #8934 found that an upgrade could install an unrelated account's package, removed that path and named me as the reporter of the ownership.",
+  "card.clawhub-package.result": "The maintainers' fix #8934 found that an upgrade could install an unrelated account's package, removed that path and named me as the reporter of the ownership problem.",
   "card.case-overwrite.area": "Data integrity",
   "card.case-overwrite.title": "A save could silently overwrite another file.",
   "card.case-overwrite.problem": "On Windows and macOS a file whose name differed only in letter case was destroyed.",
