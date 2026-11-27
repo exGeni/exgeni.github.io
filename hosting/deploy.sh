@@ -7,9 +7,10 @@
 # hosting/cv.htaccess goes to public_html/$CV_TARGET (default: cv), which sends the old CV
 # address there too. Nothing else in public_html is touched.
 #
-# api.php is uploaded last, then the script waits until $SITE_URL/TARGET/api.php reports the
-# new file's revision (the host's OPcache serves the old file for a while): status for id
-# 0000000000000000 answers {"state":"gone","rev":<first 12 hex of its md5>}.
+# api.php goes first; the script waits until $SITE_URL/TARGET/api.php reports the new file's
+# revision (the host's OPcache serves the old file for a while): status for id
+# 0000000000000000 answers {"state":"gone","rev":<first 12 hex of its md5>}. The redirects go
+# last, and only once both pages answer 200 on $PAGES_URL (default https://exgeni.github.io).
 #
 #   with-envars.sh MOCHAHOST_CPANEL_URL MOCHAHOST_CPANEL_USER MOCHAHOST_CPANEL_API_TOKEN -- \
 #     hosting/deploy.sh
@@ -22,6 +23,7 @@ booth="$root/targi-pracy/orlen"
 hdr="Authorization: cpanel ${MOCHAHOST_CPANEL_USER:?}:${MOCHAHOST_CPANEL_API_TOKEN:?}"
 base="${MOCHAHOST_CPANEL_URL:?}"; base="${base%/}"
 site="${SITE_URL:-https://exgenius.pro}"
+pages="${PAGES_URL:-https://exgeni.github.io}"
 ok() { python3 -c "import sys,json; d=json.load(sys.stdin); sys.exit(0 if $1 else 1)"; }
 
 # Create public_html/<dir> one level at a time (API2 Fileman::mkdir; an existing dir is fine).
@@ -50,19 +52,26 @@ upload() {
   echo "deploy: public_html/$1/$name"
 }
 
-mkdirs "$cv_target"
-upload "$cv_target" "$root/hosting/cv.htaccess" .htaccess
+# Order matters for the people on the booth: first the api.php that answers the Pages origin,
+# then, once the host serves it and the new pages answer, the redirects.
 mkdirs "$target"
-# api.php goes last, so the styles that match it are already in place when it switches.
 upload "$target" "$booth/styles.json"
-upload "$target" "$root/hosting/orlen.htaccess" .htaccess
 upload "$target" "$booth/api.php"
 
 rev=$(md5sum "$booth/api.php" | cut -c1-12)
+served=
 for _ in $(seq 1 "${SMOKE_TRIES:-30}"); do
   curl -sS -m 20 "$site/$target/api.php?a=status&id=0000000000000000" 2>/dev/null | ok "d.get('rev')=='$rev'" \
-    && { echo "deploy: $site/$target/api.php serves revision $rev"; exit 0; }
+    && { served=1; break; }
   sleep 2
 done
-echo "deploy: $site/$target/api.php does not serve revision $rev" >&2
-exit 1
+[ -n "$served" ] || { echo "deploy: $site/$target/api.php does not serve revision $rev; no redirect written" >&2; exit 1; }
+echo "deploy: $site/$target/api.php serves revision $rev"
+
+for page in targi-pracy/orlen/ cv/; do
+  code=$(curl -sS -m 20 -o /dev/null -w '%{http_code}' "$pages/$page" 2>/dev/null || true)
+  [ "$code" = 200 ] || { echo "deploy: $pages/$page answers ${code:-nothing}, not 200; no redirect written" >&2; exit 1; }
+done
+upload "$target" "$root/hosting/orlen.htaccess" .htaccess
+mkdirs "$cv_target"
+upload "$cv_target" "$root/hosting/cv.htaccess" .htaccess

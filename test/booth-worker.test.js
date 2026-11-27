@@ -18,7 +18,7 @@ test("deploy.sh publishes api.php, its styles and the redirects, and touches not
     "public_html/cv-preview/.htaccess",
     ...[".htaccess", "api.php", "styles.json"].map((f) => "public_html/targi-pracy/orlen-preview/" + f),
   ]);
-  assert.equal(cp.uploads.at(-1), "api.php", "api.php goes last");
+  assert.deepEqual(cp.uploads, ["styles.json", "api.php", ".htaccess", ".htaccess"], "the redirects go after api.php");
   const same = (remote, local) => assert.ok(cp.files.get(remote).body.equals(fs.readFileSync(path.join(root, local))), remote);
   same("public_html/targi-pracy/orlen-preview/api.php", "targi-pracy/orlen/api.php");
   same("public_html/targi-pracy/orlen-preview/.htaccess", "hosting/orlen.htaccess");
@@ -33,6 +33,18 @@ test("deploy.sh fails while the host still serves the previous api.php", async (
   cp.server.close();
   assert.notEqual(r.code, 0);
   assert.match(r.out, /does not serve revision/);
+  assert.ok(!cp.uploads.includes(".htaccess"), "no redirect while the old api.php is served");
+});
+
+test("deploy.sh writes no redirect while the pages on GitHub Pages do not answer", async () => {
+  const cp = await fakeCpanel();
+  cp.state.pagesMissing = true;
+  const root = copySite();
+  const r = await run("bash", [path.join(root, "hosting/deploy.sh")], { env: { ...process.env, ...cp.env } });
+  cp.server.close();
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /not 200; no redirect written/);
+  assert.ok(!cp.uploads.includes(".htaccess"));
 });
 
 test("deploy.sh fails loudly on a refused upload or missing keys", async () => {

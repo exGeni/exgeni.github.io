@@ -104,8 +104,8 @@ supplied by `with-envars.sh`:
 with-envars.sh MOCHAHOST_CPANEL_URL MOCHAHOST_CPANEL_USER MOCHAHOST_CPANEL_API_TOKEN -- hosting/deploy.sh
 ```
 
-It uploads `styles.json`, `api.php` (last, then waits until the host serves its revision) and two redirect
-files: `hosting/orlen.htaccess` sends every address in the old booth directory except `api.php` to the page
+It uploads `styles.json` and `api.php`, waits until the host serves the new `api.php`, checks that both pages
+here answer 200, and only then writes two redirect files: `hosting/orlen.htaccess` sends every address in the old booth directory except `api.php` to the page
 here, and `hosting/cv.htaccess` sends the old CV address to `/cv/`. Deploy it after a change to `api.php`,
 `styles.json` or the redirects. Run the worker the same way:
 `with-envars.sh … -- python3 -I booth-worker/worker.py`.

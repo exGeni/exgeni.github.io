@@ -14,7 +14,7 @@ function fakeCpanel() {
   const dirs = new Set();
   const uploads = []; // upload order, as deploy.sh sends files
   // failUploads: refuse every upload; failUploadsNext / failUnlinksNext: refuse the next N.
-  const state = { failUploads: false, failUploadsNext: 0, failUnlinksNext: 0, staleApi: false };
+  const state = { failUploads: false, failUploadsNext: 0, failUnlinksNext: 0, staleApi: false, pagesMissing: false };
   const server = http.createServer((req, res) => {
     const url = new URL(req.url, "http://x");
     const q = url.searchParams;
@@ -29,6 +29,8 @@ function fakeCpanel() {
         const rev = up && !state.staleApi ? require("node:crypto").createHash("md5").update(up.body).digest("hex").slice(0, 12) : undefined;
         return json({ state: "gone", rev });
       }
+      // The pages on GitHub Pages, as deploy.sh checks them before it writes the redirects.
+      if (url.pathname === "/targi-pracy/orlen/" || url.pathname === "/cv/") { res.statusCode = state.pagesMissing ? 404 : 200; return res.end(); }
       if (req.headers.authorization !== `cpanel ${USER}:${TOKEN}`) { res.statusCode = 401; return res.end(); }
       if (url.pathname === "/execute/Fileman/list_files") {
         const dir = q.get("dir") + "/";
@@ -75,7 +77,7 @@ function fakeCpanel() {
     files, dirs, uploads, server, state,
     env: {
       MOCHAHOST_CPANEL_URL: `http://127.0.0.1:${server.address().port}/`, MOCHAHOST_CPANEL_USER: USER, MOCHAHOST_CPANEL_API_TOKEN: TOKEN,
-      SITE_URL: `http://127.0.0.1:${server.address().port}`,
+      SITE_URL: `http://127.0.0.1:${server.address().port}`, PAGES_URL: `http://127.0.0.1:${server.address().port}`,
     },
   })));
 }
