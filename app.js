@@ -1,91 +1,245 @@
-const fallback = {
-  totals: { issues: 189, pull_requests: 18, tracked_items: 207, open_issues: 36, open_pull_requests: 1 },
-  projects: [
-    { name: 'GBrain', total: 98 }, { name: 'GStack', total: 79 },
-    { name: 'AlphaClaw', total: 24 }, { name: 'OpenClaw', total: 6 }
-  ],
-  monthly: [
-    { month: 'Jun', issues: 3, pull_requests: 0, total: 3 },
-    { month: 'Jul', issues: 17, pull_requests: 2, total: 19 },
-    { month: 'Aug', issues: 11, pull_requests: 2, total: 13 },
-    { month: 'Sep', issues: 22, pull_requests: 4, total: 26 },
-    { month: 'Oct', issues: 59, pull_requests: 6, total: 65 },
-    { month: 'Nov*', issues: 77, pull_requests: 4, total: 81 }
-  ],
-  adoption: { adopted: 15, awaiting_follow_up: 2, not_adopted: 1 }
-};
+import english from './i18n/en.mjs?v=5';
+import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=5';
+import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=5';
+import { percentLabel } from './lib/stats.mjs?v=5';
 
-function el(id) { return document.getElementById(id); }
-function renderMonthly(data) {
-  const root = el('monthly-chart');
-  if (!root) return;
-  const max = Math.max(...data.map(x => x.total), 1);
-  root.innerHTML = data.map(item => {
-    const totalHeight = Math.max(4, (item.total / max) * 132);
-    const issueHeight = item.total ? totalHeight * item.issues / item.total : 0;
-    const prHeight = item.total ? totalHeight * item.pull_requests / item.total : 0;
-    return `<div class="month-column"><span class="month-total">${item.total}</span><div class="month-bar" style="height:${totalHeight}px"><span class="issues" style="height:${issueHeight}px"></span><span class="prs" style="height:${prHeight}px"></span></div><span class="month-label">${item.month}</span></div>`;
-  }).join('');
+const el = id => document.getElementById(id);
+const narrow = window.matchMedia('(max-width: 620px)');
+const lang = pickLanguage(location.search, navigator.languages || [navigator.language]);
+let activeLang = 'en';
+let t = translator('en', null, english);
+let model = null;
+let failed = false;
+
+function node(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
 }
-function renderCumulative(data) {
-  const root = el('cumulative-chart');
-  if (!root) return;
-  let running = 0;
-  const points = data.map((item, index) => {
-    running += item.total;
-    return { month: item.month, total: running, x: 24 + index * (552 / Math.max(1, data.length - 1)) };
+function svg(tag, attributes) {
+  const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+  return element;
+}
+function setText(id, text) {
+  const element = el(id);
+  if (element) element.textContent = text;
+}
+
+function applyStrings() {
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const value = t(element.dataset.i18n);
+    if (value !== undefined) element.textContent = value;
   });
-  const max = Math.max(...points.map(p => p.total), 1);
-  const coords = points.map(p => ({ ...p, y: 70 - (p.total / max) * 48 }));
-  const path = coords.map((p, i) => `${i ? 'L' : 'M'} ${p.x} ${p.y}`).join(' ');
-  const markers = coords.map(p => `<circle cx="${p.x}" cy="${p.y}" r="3.3"></circle>`).join('');
-  const first = coords[0];
-  const last = coords[coords.length - 1];
-  root.innerHTML = `<svg viewBox="0 0 600 88" preserveAspectRatio="none" aria-hidden="true"><path class="cumulative-grid" d="M24 70 H576 M24 22 H576"></path><path class="cumulative-area" d="${path} L ${last.x} 70 L ${first.x} 70 Z"></path><path class="cumulative-line" d="${path}"></path><g class="cumulative-points">${markers}</g><text x="24" y="85">${first.month}</text><text x="576" y="85" text-anchor="end">${last.month}</text><text x="576" y="13" text-anchor="end">${last.total}</text></svg>`;
-  el('cumulative-total').textContent = running;
+  document.querySelectorAll('[data-i18n-attr]').forEach(element => {
+    for (const pair of element.dataset.i18nAttr.split(';')) {
+      const [name, key] = pair.split(':');
+      const value = t(key);
+      if (value !== undefined) element.setAttribute(name, value);
+    }
+  });
+  document.querySelectorAll('time[datetime]').forEach(element => {
+    element.textContent = formatDate(activeLang, new Date(`${element.dateTime}T00:00:00Z`));
+  });
+  document.documentElement.lang = activeLang;
 }
-function renderProjects(projects) {
-  const root = el('project-chart');
+
+function updateSwitcher() {
+  document.querySelectorAll('[data-lang]').forEach(link => {
+    link.setAttribute('href', `?lang=${link.dataset.lang}${location.hash}`);
+    if (link.dataset.lang === activeLang) link.setAttribute('aria-current', 'true');
+    else link.removeAttribute('aria-current');
+  });
+}
+
+function section(name, ready, paint) {
+  const root = document.querySelector(`[data-section="${name}"]`);
   if (!root) return;
-  const colors = ['#315f9f', '#6485ad', '#287b73', '#a2afbf'];
-  const total = projects.reduce((sum, project) => sum + project.total, 0);
-  const radius = 64;
-  const circumference = 2 * Math.PI * radius;
+  const notice = root.querySelector('.section-notice');
+  const body = root.querySelector('.section-body');
+  let broken = failed || (model !== null && !ready);
+  if (!broken && model) {
+    try { paint(); } catch (error) { console.error(`render failed: ${name}`, error); broken = true; }
+  }
+  if (notice) { notice.hidden = !broken; notice.textContent = broken ? t('unavailable') : ''; }
+  if (body) body.hidden = broken;
+}
+
+function renderFigures() {
+  const figures = model?.figures;
+  const map = {
+    'total-items': 'tracked', 'completed-total': 'completed', 'adopted-total': 'adopted', 'adopted-metric': 'adopted',
+    'awaiting-metric': 'awaiting', 'open-issues': 'openIssues', 'open-prs': 'openPulls'
+  };
+  for (const [id, key] of Object.entries(map)) {
+    const value = figures?.[key];
+    const element = el(id);
+    if (!element) continue;
+    const unknown = failed || (model && value === null);
+    element.textContent = unknown ? '–' : value ?? '–';
+    if (unknown) element.title = t('unavailable'); else element.removeAttribute('title');
+  }
+  const parts = figures && [figures.issues, figures.completed, figures.openIssues, figures.notPlanned, figures.other];
+  setText('issues-line', parts && parts.every(v => v !== null)
+    ? t('issuesLine', { n: figures.issues, completed: figures.completed, open: figures.openIssues, notPlanned: figures.notPlanned, other: figures.other })
+    : '');
+  setText('snapshot-date', model?.generatedAt ? t('snapshot', { date: formatDate(activeLang, model.generatedAt) }) : '');
+  setText('projects-count', model?.repositories ? t('projectsCount', { n: model.repositories }) : '');
+  const notice = el('data-notice');
+  if (notice) {
+    const message = failed || (model && model.figures.tracked === null) ? t('unavailable') : model?.stale ? t('stale') : '';
+    notice.textContent = message;
+    notice.hidden = !message;
+  }
+}
+
+function renderMonthly() {
+  const root = el('monthly-chart');
+  const rows = visibleMonths(model.monthly, narrow.matches);
+  const max = Math.max(...rows.map(row => row.total), 1);
+  root.style.setProperty('--columns', rows.length);
+  root.replaceChildren(...rows.map((row, index) => {
+    const column = node('div', 'month-column');
+    const height = row.total ? Math.max(4, (row.total / max) * 132) : 0;
+    const bar = node('div', 'month-bar');
+    bar.style.height = `${height}px`;
+    if (!row.total) bar.style.minHeight = '0';
+    for (const [className, value] of [['issues', row.issues], ['prs', row.pull_requests]]) {
+      const part = node('span', className);
+      part.style.height = `${row.total ? (height * value) / row.total : 0}px`;
+      bar.append(part);
+    }
+    const { month, year } = monthLabel(activeLang, row.month, index === 0);
+    const label = node('span', 'month-label', month);
+    label.append(node('span', 'month-year', year || ' '));
+    column.append(node('span', 'month-total', row.total), bar, label);
+    return column;
+  }));
+  const first = monthLabel(activeLang, rows[0].month, true);
+  const last = monthLabel(activeLang, rows[rows.length - 1].month, true);
+  setText('chart-period', `${first.month} ${first.year} — ${last.month} ${last.year}`);
+  setText('monthly-foot', t('monthlyFoot'));
+  setText('through-date', model.generatedAt ? t('through', { date: formatDate(activeLang, model.generatedAt) }) : '');
+}
+
+function renderCumulative() {
+  const points = cumulative(model.monthly);
+  const max = Math.max(points[points.length - 1].total, 1);
+  const x = i => (points.length === 1 ? 300 : 4 + (i * 592) / (points.length - 1));
+  const coords = points.map((p, i) => ({ x: x(i), y: 66 - (p.total / max) * 56 }));
+  const line = coords.map((p, i) => `${i ? 'L' : 'M'} ${p.x} ${p.y}`).join(' ');
+  const chart = svg('svg', { viewBox: '0 0 600 72', preserveAspectRatio: 'none', 'aria-hidden': 'true' });
+  chart.append(
+    svg('path', { class: 'cumulative-grid', d: 'M0 66 H600 M0 10 H600' }),
+    svg('path', { class: 'cumulative-area', d: `${line} L ${coords[coords.length - 1].x} 66 L ${coords[0].x} 66 Z` }),
+    svg('path', { class: 'cumulative-line', d: line })
+  );
+  el('cumulative-chart').replaceChildren(chart);
+  const labels = cumulativeLabelIndexes(points.map(p => p.month), Math.max(2, Math.ceil(points.length / (narrow.matches ? 4 : 8))));
+  el('cumulative-labels').replaceChildren(...labels.map((i, position) => {
+    const { month, year } = monthLabel(activeLang, points[i].month, true);
+    const label = node('span', position === 0 ? 'first' : position === labels.length - 1 ? 'last' : '', `${month} ${year}`);
+    label.style.left = `${(x(i) / 600) * 100}%`;
+    return label;
+  }));
+  setText('cumulative-total', points[points.length - 1].total);
+}
+
+function renderOutcomes() {
+  const o = model.outcomes;
+  let summary = t('outcomeSummary', { adopted: o.adopted, awaiting: o.awaiting, notAdopted: o.notAdopted });
+  if (o.notReviewed) summary += t('outcomeUnreviewed', { n: o.notReviewed });
+  setText('outcome-summary', summary);
+  el('outcome-track').setAttribute('aria-label', summary);
+  for (const [id, value] of [['outcome-adopted', o.adopted], ['outcome-awaiting', o.awaiting], ['outcome-not-adopted', o.notAdopted], ['outcome-not-reviewed', o.notReviewed]]) {
+    el(id).style.flex = String(value);
+    el(id).hidden = !value;
+  }
+  document.querySelector('.legend-not-reviewed-item').hidden = !o.notReviewed;
+}
+
+function renderProjects() {
+  const colors = ['#315f9f', '#6485ad', '#287b73', '#a2afbf', '#1d3b63'];
+  const projects = model.projects;
+  const total = projects.reduce((sum, p) => sum + p.total, 0);
+  const circumference = 2 * Math.PI * 64;
+  const chart = svg('svg', { viewBox: '0 0 180 180', 'aria-hidden': 'true' });
+  chart.append(svg('circle', { class: 'donut-track', cx: 90, cy: 90, r: 64 }));
   let offset = 0;
-  const segments = projects.map((project, index) => {
-    const length = total ? (project.total / total) * circumference : 0;
-    const segment = `<circle class="donut-segment" cx="90" cy="90" r="${radius}" stroke="${colors[index % colors.length]}" stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}"></circle>`;
-    offset += length;
-    return segment;
-  }).join('');
-  const legend = projects.map((project, index) => {
-    const share = total ? Math.round((project.total / total) * 100) : 0;
-    return `<div class="project-legend-row"><i class="project-swatch" style="background:${colors[index % colors.length]}"></i><span class="project-legend-name">${project.name}</span><span class="project-legend-value">${project.total}<small>${share}%</small></span></div>`;
-  }).join('');
-  root.innerHTML = `<div class="project-donut" role="img" aria-label="Donut chart: ${projects.map(p => `${p.name} ${p.total}`).join(', ')}"><svg viewBox="0 0 180 180" aria-hidden="true"><circle class="donut-track" cx="90" cy="90" r="${radius}"></circle>${segments}</svg><div class="donut-center"><strong>${total}</strong><span>Total items</span></div></div><div class="project-legend">${legend}</div>`;
+  projects.forEach((p, i) => {
+    const share = total ? (p.total / total) * circumference : 0;
+    const length = p.total ? Math.max(share, 3) : 0;
+    chart.append(svg('circle', { class: 'donut-segment', cx: 90, cy: 90, r: 64, stroke: colors[i % colors.length], 'stroke-dasharray': `${length} ${circumference - length}`, 'stroke-dashoffset': -Math.min(offset, circumference - length) }));
+    offset += share;
+  });
+  const donut = node('div', 'project-donut');
+  donut.setAttribute('role', 'img');
+  donut.setAttribute('aria-label', t('donutLabel', { list: projects.map(p => `${p.name} ${p.total}`).join(', ') }));
+  const center = node('div', 'donut-center');
+  center.append(node('strong', '', total), node('span', '', t('donutTotal')));
+  donut.append(chart, center);
+  const legend = node('div', 'project-legend');
+  legend.append(...projects.map((p, i) => {
+    const row = node('div', 'project-legend-row');
+    const swatch = node('i', 'project-swatch');
+    swatch.style.background = colors[i % colors.length];
+    const value = node('span', 'project-legend-value', p.total);
+    value.append(node('small', '', percentLabel(p.total, total)));
+    row.append(swatch, node('span', 'project-legend-name', p.name), value);
+    return row;
+  }));
+  el('project-chart').replaceChildren(donut, legend);
 }
-function render(data) {
-  const t = data.totals || fallback.totals;
-  const a = data.adoption || fallback.adoption;
-  el('total-items').textContent = t.tracked_items;
-  el('issue-total').textContent = t.issues;
-  el('pr-total').textContent = t.pull_requests;
-  el('adopted-total').textContent = a.adopted;
-  el('adopted-metric').textContent = a.adopted;
-  el('awaiting-metric').textContent = a.awaiting_follow_up;
-  el('open-issues').textContent = t.open_issues;
-  el('open-prs').textContent = t.open_pull_requests;
-  el('outcome-summary').textContent = `${a.adopted} adopted · ${a.awaiting_follow_up} awaiting follow-up · ${a.not_adopted} not adopted`;
-  el('outcome-track').setAttribute('aria-label', `${a.adopted} adopted, ${a.awaiting_follow_up} awaiting follow-up, ${a.not_adopted} not adopted`);
-  el('outcome-adopted').style.flex = String(a.adopted);
-  el('outcome-awaiting').style.flex = String(a.awaiting_follow_up);
-  el('outcome-not-adopted').style.flex = String(a.not_adopted);
-  renderMonthly(data.monthly || fallback.monthly);
-  renderCumulative(data.monthly || fallback.monthly);
-  renderProjects(data.projects || fallback.projects);
+
+function render() {
+  try { renderFigures(); } catch (error) { console.error('render failed: figures', error); }
+  section('monthly', model?.monthly, () => { renderMonthly(); renderCumulative(); });
+  section('outcomes', model?.outcomes, renderOutcomes);
+  section('projects', model?.projects, renderProjects);
 }
-render(fallback);
-fetch('data/contributions.json', { cache: 'no-store' })
-  .then(response => response.ok ? response.json() : Promise.reject(new Error('Snapshot unavailable')))
-  .then(render)
-  .catch(() => {});
+
+function foldDetails() {
+  document.querySelectorAll('.case-details').forEach(details => { details.open = !narrow.matches; });
+}
+
+async function loadLanguage() {
+  if (lang === 'en' || !LANGUAGES.includes(lang)) return;
+  const url = `i18n/${lang}.json?v=5`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const dictionary = await response.json();
+    activeLang = lang;
+    t = translator(lang, dictionary, english);
+    applyStrings();
+    updateSwitcher();
+    render();
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  } catch (error) {
+    console.error(`dictionary failed: ${url}`, error);
+  } finally {
+    document.documentElement.classList.remove('i18n-hold');
+  }
+}
+
+async function loadData() {
+  const url = 'data/contributions.json';
+  try {
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    model = viewModel(await response.json());
+  } catch (error) {
+    console.error(`fetch failed: ${url}`, error);
+    failed = true;
+  }
+  render();
+}
+
+applyStrings();
+updateSwitcher();
+foldDetails();
+window.addEventListener('hashchange', updateSwitcher);
+narrow.addEventListener('change', () => { foldDetails(); render(); });
+loadLanguage();
+loadData();
