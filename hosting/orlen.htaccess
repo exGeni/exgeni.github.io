@@ -1,0 +1,4 @@
+# The photo booth page lives on GitHub Pages; only api.php is served from here.
+# A shared link keeps its ?id=..., so the page resumes the portrait.
+RewriteEngine On
+RewriteRule !^api\.php$ https://exgeni.github.io/targi-pracy/orlen/ [R=301,L]
