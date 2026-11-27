@@ -17,6 +17,7 @@ test('English in index.html equals the English module', () => {
   assert.equal(textKeys.length, (html.match(/\sdata-i18n="/g) || []).length, 'every data-i18n element holds plain text only');
   for (const [, , key, text] of textKeys) assert.equal(decode(text), english[key], key);
   for (const key of attrKeys) assert.ok(english[key], key);
+  for (const [, key, text] of html.matchAll(/data-i18n-count="([^"]+)"[^>]*>([^<]*)</g)) assert.equal(decode(text), english[key].other, key);
 });
 
 for (const lang of ['ru', 'pl']) {
@@ -42,6 +43,8 @@ test('cards match data/cards.json: order, label, links, date', async () => {
     assert.deepEqual(links, [card.issue_url, card.pr_url, card.landing_url].filter(Boolean).sort(), `${card.id} links`);
     assert.ok(body.includes(`datetime="${card.checked_on}"`), `${card.id} date`);
     assert.ok(links.every(url => url.startsWith('https://')));
+    assert.ok(card.issue_url, `${card.id} issue_url`);
+    assert.ok(card.label === 'awaiting_merge' ? card.pr_url : card.landing_url, `${card.id} lacks the URL its label is checked against`);
   }
 });
 

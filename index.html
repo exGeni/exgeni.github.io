@@ -19,7 +19,7 @@
       setTimeout(function () { document.documentElement.classList.remove('i18n-hold'); }, 1500);
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
   <header class="site-header wrap">
@@ -50,9 +50,9 @@
       </div>
       <aside class="hero-ledger" aria-label="Contribution summary" data-i18n-attr="aria-label:aria.summary">
         <div class="ledger-top"><span data-i18n="ledger.title">Upstream activity</span><span class="live-mark" id="snapshot-date"></span></div>
-        <div class="big-stat"><strong id="total-items" data-figure>–</strong><span data-i18n="ledger.tracked">issues and pull requests</span></div>
+        <div class="big-stat"><strong id="total-items" data-figure>–</strong><span data-i18n-count="ledger.tracked" data-count-of="total-items">issues and pull requests</span></div>
         <div class="ledger-rule"></div>
-        <div class="stat-pair"><div><strong id="completed-total" data-figure>–</strong><span data-i18n="ledger.completed">Issues closed as completed</span></div><div><strong id="adopted-total" data-figure>–</strong><span data-i18n="ledger.adopted">PR contributions adopted upstream through maintainer follow-ups</span></div></div>
+        <div class="stat-pair"><div><strong id="completed-total" data-figure>–</strong><span data-i18n="ledger.completed">Issues closed as completed</span></div><div><strong id="adopted-total" data-figure>–</strong><span data-i18n-count="ledger.adopted" data-count-of="adopted-total">PR contributions adopted upstream through maintainer follow-ups</span></div></div>
         <p class="issues-line" id="issues-line"></p>
         <p class="data-notice" id="data-notice" role="status" hidden></p>
         <noscript><p class="data-notice"><span data-i18n="noscript">Live figures need JavaScript. The full public record is on GitHub:</span> <a href="https://github.com/exGeni">github.com/exGeni</a></p></noscript>
@@ -254,6 +254,6 @@
   </main>
 
   <footer class="wrap site-footer"><div><strong>Evgenii Lopatin</strong><span data-i18n="footer.tagline">Open-source work · AI agent infrastructure · Developer tooling</span></div><a href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub ↗</a><small>© 2026</small></footer>
-  <script type="module" src="app.js?v=8"></script>
+  <script type="module" src="app.js?v=9"></script>
 </body>
 </html>

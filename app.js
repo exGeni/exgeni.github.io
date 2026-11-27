@@ -1,7 +1,7 @@
-import english from './i18n/en.mjs?v=8';
-import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=8';
-import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=8';
-import { percentLabel } from './lib/stats.mjs?v=8';
+import english from './i18n/en.mjs?v=9';
+import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=9';
+import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=9';
+import { percentLabel } from './lib/stats.mjs?v=9';
 
 const el = id => document.getElementById(id);
 const narrow = window.matchMedia('(max-width: 620px)');
@@ -84,6 +84,10 @@ function renderFigures() {
   setText('issues-line', parts && parts.every(v => v !== null)
     ? t('issuesLine', { n: figures.issues, completed: figures.completed, open: figures.openIssues, notPlanned: figures.notPlanned, other: figures.other })
     : '');
+  document.querySelectorAll('[data-i18n-count]').forEach(element => {
+    const n = Number.parseInt(el(element.dataset.countOf).textContent, 10);
+    element.textContent = t(element.dataset.i18nCount, { n: Number.isNaN(n) ? 0 : n });
+  });
   setText('snapshot-date', model?.generatedAt ? t('snapshot', { date: formatDate(activeLang, model.generatedAt) }) : '');
   setText('projects-count', model?.repositories ? t('projectsCount', { n: model.repositories }) : '');
   const notice = el('data-notice');
@@ -206,7 +210,7 @@ function foldDetails() {
 /** Repaints the page in one language. Returns false when the dictionary cannot be loaded. */
 async function showLanguage(code) {
   const request = ++languageRequest;
-  const url = `i18n/${code}.json?v=8`;
+  const url = `i18n/${code}.json?v=9`;
   try {
     let dictionary = null;
     if (code !== 'en') {

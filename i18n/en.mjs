@@ -17,9 +17,15 @@ export default {
   "hero.explore": "Explore selected work ↓",
   "aria.summary": "Contribution summary",
   "ledger.title": "Upstream activity",
-  "ledger.tracked": "issues and pull requests",
+  "ledger.tracked": {
+    "one": "issue or pull request",
+    "other": "issues and pull requests"
+  },
   "ledger.completed": "Issues closed as completed",
-  "ledger.adopted": "PR contributions adopted upstream through maintainer follow-ups",
+  "ledger.adopted": {
+    "one": "PR contribution adopted upstream through maintainer follow-ups",
+    "other": "PR contributions adopted upstream through maintainer follow-ups"
+  },
   "noscript": "Live figures need JavaScript. The full public record is on GitHub:",
   "projects.eyebrow": "My open-source projects",
   "projects.title": "Things I build.",
