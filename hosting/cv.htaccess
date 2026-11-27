@@ -1,0 +1,3 @@
+# The CV lives on GitHub Pages.
+RewriteEngine On
+RewriteRule ^ https://exgeni.github.io/cv/ [R=301,L]

@@ -3,7 +3,10 @@
 A static portfolio page for the public open-source work of `@exGeni`, in English, Russian and Polish.
 Published by GitHub Pages from `main` at `https://exgeni.github.io`. A merge is public at once.
 
-No build step, framework, chart library, analytics or backend.
+No build step, framework, chart library, analytics or backend for the portfolio page.
+
+Two more pages live here, moved from exgenius.pro: the CV at `https://exgeni.github.io/cv/` (`cv/`) and the
+AI photo booth at `https://exgeni.github.io/targi-pracy/orlen/` (see [Photo booth](#photo-booth)).
 
 ## Develop
 
@@ -77,6 +80,37 @@ checks that they agree).
 | `STATS_CARD` | a public card no longer holds | edit `data/cards.json` and the card |
 
 A failed refresh writes no snapshot; the page keeps the older one and says so after three days.
+
+## Photo booth
+
+The booth is three parts sharing one job-file protocol, described at the top of `targi-pracy/orlen/api.php`:
+
+- `targi-pracy/orlen/index.html`: the visitor page, served by GitHub Pages. It keeps the job id in the URL and
+  calls the API at `https://exgenius.pro/targi-pracy/orlen/api.php`.
+- `targi-pracy/orlen/api.php`: runs on the PHP hosting behind exgenius.pro (Pages runs no PHP). It writes jobs
+  to `targi-jobs/` next to the web root, enforces queue, address and day caps, reports "offline" when the
+  worker's heartbeat is stale, and sends CORS for `https://exgeni.github.io`. It holds no secret.
+- `booth-worker/worker.py`: runs on our own machine. It reaches the job directory only over the cPanel API,
+  renders with a locked-down `codex` and uploads results.
+
+`targi-pracy/orlen/styles.json` is read by the page, `api.php` and `worker.py`. Timing constants are paired:
+`api.php` `QUEUE_EXPIRY`/`WORKER_SILENT`/`TTL` with `worker.py` `JOB_EXPIRY`/`HEARTBEAT`/`TTL`, and the page's
+900 s wait with `RENDER_TIMEOUT`.
+
+A merge publishes the page. The server part goes to the hosting with `hosting/deploy.sh`, the cPanel keys
+supplied by `with-envars.sh`:
+
+```sh
+with-envars.sh MOCHAHOST_CPANEL_URL MOCHAHOST_CPANEL_USER MOCHAHOST_CPANEL_API_TOKEN -- hosting/deploy.sh
+```
+
+It uploads `styles.json`, `api.php` (last, then waits until the host serves its revision) and two redirect
+files: `hosting/orlen.htaccess` sends every address in the old booth directory except `api.php` to the page
+here, and `hosting/cv.htaccess` sends the old CV address to `/cv/`. Deploy it after a change to `api.php`,
+`styles.json` or the redirects. Run the worker the same way:
+`with-envars.sh … -- python3 -I booth-worker/worker.py`.
+
+The `api.php` tests need `php` with GD and the worker tests `python3` and `ffmpeg`; without them they skip.
 
 ## Check before a merge
 
