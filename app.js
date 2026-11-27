@@ -1,7 +1,7 @@
-import english from './i18n/en.mjs?v=5';
-import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=5';
-import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=5';
-import { percentLabel } from './lib/stats.mjs?v=5';
+import english from './i18n/en.mjs?v=6';
+import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=6';
+import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=6';
+import { percentLabel } from './lib/stats.mjs?v=6';
 
 const el = id => document.getElementById(id);
 const narrow = window.matchMedia('(max-width: 620px)');
@@ -47,7 +47,6 @@ function applyStrings() {
 
 function updateSwitcher() {
   document.querySelectorAll('[data-lang]').forEach(link => {
-    link.setAttribute('href', `?lang=${link.dataset.lang}${location.hash}`);
     if (link.dataset.lang === activeLang) link.setAttribute('aria-current', 'true');
     else link.removeAttribute('aria-current');
   });
@@ -203,24 +202,51 @@ function foldDetails() {
   document.querySelectorAll('.case-details').forEach(details => { details.open = !narrow.matches; });
 }
 
-async function loadLanguage() {
-  if (lang === 'en' || !LANGUAGES.includes(lang)) return;
-  const url = `i18n/${lang}.json?v=5`;
+/** Repaints the page in one language. Returns false when the dictionary cannot be loaded. */
+async function showLanguage(code) {
+  const url = `i18n/${code}.json?v=6`;
   try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const dictionary = await response.json();
-    activeLang = lang;
-    t = translator(lang, dictionary, english);
+    let dictionary = null;
+    if (code !== 'en') {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      dictionary = await response.json();
+    }
+    activeLang = code;
+    t = translator(code, dictionary, english);
     applyStrings();
     updateSwitcher();
     render();
-    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    return true;
   } catch (error) {
     console.error(`dictionary failed: ${url}`, error);
-  } finally {
-    document.documentElement.classList.remove('i18n-hold');
+    return false;
   }
+}
+
+async function loadLanguage() {
+  if (lang !== 'en' && LANGUAGES.includes(lang) && await showLanguage(lang) && location.hash) {
+    document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }
+  updateSwitcher();
+  document.documentElement.classList.remove('i18n-hold');
+}
+
+// Switching in place: no reload, no jump to the last anchor, the reader stays where they were.
+function onLanguageClick(event) {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
+  event.preventDefault();
+  const code = event.currentTarget.dataset.lang;
+  // The innermost block that starts at or above the top edge and is still on screen.
+  const visible = [...document.querySelectorAll('.site-header, main section, .case-row')]
+    .filter(element => element.getBoundingClientRect().bottom > 1);
+  const anchor = visible.filter(element => element.getBoundingClientRect().top <= 1).pop() || visible[0];
+  const offset = anchor?.getBoundingClientRect().top;
+  showLanguage(code).then(shown => {
+    if (!shown) return;
+    history.replaceState(null, '', `?lang=${code}`);
+    if (anchor) window.scrollBy({ top: anchor.getBoundingClientRect().top - offset, behavior: 'instant' });
+  });
 }
 
 async function loadData() {
@@ -239,7 +265,7 @@ async function loadData() {
 applyStrings();
 updateSwitcher();
 foldDetails();
-window.addEventListener('hashchange', updateSwitcher);
+document.querySelectorAll('[data-lang]').forEach(link => link.addEventListener('click', onLanguageClick));
 narrow.addEventListener('change', () => { foldDetails(); render(); });
 loadLanguage();
 loadData();

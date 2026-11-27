@@ -108,3 +108,4 @@ Keep panels square or nearly square. Use 1–2px radii for small marks and statu
 |------|----------|-----------|
 | 2026-11-19 | Initial design system recorded | Captured from the rendered portfolio after improving text contrast, type size, and mobile link targets. |
 | 2026-11-27 | Blue status for reported work; projects and selected work before charts; three languages | A reader should see proof first and not mistake a report for authored code. |
+| 2026-11-27 | Desktop type one step larger (body 18px, labels 15px); language switches in place | The owner found the desktop text hard to read, and switching jumped to the last anchor. |

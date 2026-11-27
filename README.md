@@ -81,7 +81,7 @@ A failed refresh writes no snapshot; the page keeps the older one and says so af
 ## Check before a merge
 
 `node --test` passes, then by eye in `en`, `ru`, `pl` at desktop width and at 320px: no side scroll, the
-language links keep the section, cards fold on the phone; `unavailable`, `old`, `stale`, `unreviewed`,
+switching the language keeps the reading position, cards fold on the phone; `unavailable`, `old`, `stale`, `unreviewed`,
 `months12` and `months24` previews read correctly; with scripts off the text, projects and cards remain.
 
 If `data/contributions.json` conflicts on rebase, rerun the refresh script instead of merging by hand.
