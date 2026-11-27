@@ -200,3 +200,17 @@ test("api.php answers the GitHub Pages origin, preflight included", { skip }, as
     b.close();
   }
 });
+
+// An IPv4 visitor shown as ::ffff:a.b.c.d is that IPv4 address, not one shared IPv6 /64 bucket.
+test("api.php keeps IPv4-mapped visitors apart and groups an IPv6 /64", { skip }, () => {
+  const src = fs.readFileSync(path.join(__dirname, "..", "targi-pracy", "orlen", "api.php"), "utf8");
+  const code = `$src = file_get_contents($argv[1]); preg_match('/function client_key.*?\\n}\\n/s', $src, $m); eval($m[0]);
+    foreach (array_slice($argv, 2) as $ip) { $_SERVER['REMOTE_ADDR'] = $ip; echo client_key('d'), "\\n"; }`;
+  const ips = ["::ffff:1.2.3.4", "::ffff:5.6.7.8", "1.2.3.4", "2001:db8:1:2::1", "2001:db8:1:2:ffff::9", "2001:db8:1:3::1"];
+  const keys = spawnSync("php", ["-r", code, "--", path.join(__dirname, "..", "targi-pracy", "orlen", "api.php"), ...ips]).stdout.toString().trim().split("\n");
+  assert.equal(keys.length, ips.length);
+  assert.notEqual(keys[0], keys[1], "two IPv4 visitors behind mapped addresses");
+  assert.equal(keys[0], keys[2], "a mapped address is the plain IPv4 address");
+  assert.equal(keys[3], keys[4], "one IPv6 /64 is one visitor");
+  assert.notEqual(keys[3], keys[5], "another /64 is another visitor");
+});

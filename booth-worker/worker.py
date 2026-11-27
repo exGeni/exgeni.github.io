@@ -32,6 +32,7 @@ CODEX_ENV = {k: v for k, v in os.environ.items()
              if k in ("PATH", "HOME", "USER", "LANG", "TERM", "TMPDIR", "NO_PROXY", "no_proxy")
              or k.startswith(("LC_", "CODEX_", "SSL_CERT_", "NODE_EXTRA_CA")) or k.lower().endswith("_proxy")}
 RENDERS = set()     # process group ids of running codex renders, killed on shutdown
+IMAGE_DIRS = set()  # codex thread ids whose generated images are still on this machine
 DELIVERED = set()   # jobs whose result this process uploaded completely
 CODEX_OFF = ["shell_tool", "unified_exec", "view_image", "multi_agent", "browser_use", "computer_use",
              "tool_suggest", "hooks", "plugins", "apps", "goals", "skill_search"]
@@ -154,6 +155,8 @@ def render(photo: bytes, scene: str) -> bytes:
                 if isinstance(ev, dict) and ev.get("type") == "thread.started":
                     tid = str(ev.get("thread_id", ""))
                     thread = tid if re.fullmatch(r"[0-9A-Za-z_-]{1,64}", tid) else None
+                    if thread:
+                        IMAGE_DIRS.add(thread)
             if not thread:
                 raise RuntimeError(f"codex exit {p.returncode}: {err[-300:]}")
             pngs = sorted(glob.glob(str(CODEX_IMAGES / thread / "*.png")), key=os.path.getmtime)
@@ -167,6 +170,7 @@ def render(photo: bytes, scene: str) -> bytes:
         # Visitor images never stay on this machine; only this turn's own directory is touched.
         if thread:
             shutil.rmtree(CODEX_IMAGES / thread, ignore_errors=True)
+            IMAGE_DIRS.discard(thread)
 
 
 def handle(jid):
@@ -242,6 +246,8 @@ def sweep(files, active, fresh_start=False):
             # and only the cleanup failed; a dead run's claim next to a result may be half-written.
             if jid + ERR in files or (jid + OUT in files and (not work or jid in DELIVERED)):
                 unlink(*[x for x in (jid + IN, jid + WORK) if x in files])   # finished; only cleanup failed
+            elif stale and jid + OUT in files and now - int(f["mtime"]) > JOB_EXPIRY:
+                unlink(jid + IN, jid + WORK)   # too late to render again: keep the result (api.php serves it only if whole)
             elif stale:
                 if jid + OUT in files:
                     unlink(jid + OUT)                                    # possibly half-written: render again
@@ -270,7 +276,15 @@ def poll_once(active, fresh_start=False):
     for _, jid in queued:
         if len(active) >= WORKERS or jid in active:
             continue
-        upload(jid + WORK, b"1", "text/plain")
+        try:
+            upload(jid + WORK, b"1", "text/plain")
+        except Exception as e:   # the host may have saved the claim and lost the answer: give it back
+            log("claim", jid, repr(e)[:200])
+            try:
+                unlink(jid + WORK)
+            except Exception:
+                pass
+            continue
         active.add(jid)   # only this thread adds; workers only discard
 
         def run(j=jid):
@@ -298,6 +312,8 @@ def main():
                 pass
         for d in glob.glob(os.path.join(tempfile.gettempdir(), "targi-booth-job-*")):
             shutil.rmtree(d, ignore_errors=True)
+        for t in list(IMAGE_DIRS):   # the renders were killed: their portraits go too
+            shutil.rmtree(CODEX_IMAGES / t, ignore_errors=True)
         sys.exit(128 + signum)
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)

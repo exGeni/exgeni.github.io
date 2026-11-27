@@ -51,8 +51,18 @@ function job_id(): string {
 function client_key(string $day): string {
   $ip = $_SERVER['REMOTE_ADDR'] ?? '';
   $bin = @inet_pton($ip);
-  if ($bin !== false && strlen($bin) === 16) $ip = bin2hex(substr($bin, 0, 8)) . '::/64';
+  if ($bin !== false && strlen($bin) === 16 && substr($bin, 0, 12) === "\0\0\0\0\0\0\0\0\0\0\xFF\xFF") $ip = inet_ntop(substr($bin, 12));   // ::ffff:a.b.c.d is that IPv4 visitor
+  elseif ($bin !== false && strlen($bin) === 16) $ip = bin2hex(substr($bin, 0, 8)) . '::/64';
   return substr(hash('sha256', $day . $ip), 0, 16);
+}
+
+// False while OPcache still runs an older compile of this file than the one on disk (deploy.sh
+// must not take md5_file() of the new file for proof that the new code answers).
+function code_is_current(): bool {
+  if (!function_exists('opcache_get_status')) return true;
+  $s = @opcache_get_status(true);
+  $at = is_array($s) ? ($s['scripts'][__FILE__]['timestamp'] ?? null) : null;
+  return $at === null || $at === (int)@filemtime(__FILE__);
 }
 
 // A finished result counts only once its JPEG end marker is there (uploads are not atomic).
@@ -185,7 +195,7 @@ if ($a === 'status') {
     }
     out(200, ['state' => 'queued', 'ahead' => $ahead]);
   }
-  out(200, $id === '0000000000000000' ? ['state' => 'gone', 'rev' => substr(md5_file(__FILE__), 0, 12)] : ['state' => 'gone']);
+  out(200, $id === '0000000000000000' && code_is_current() ? ['state' => 'gone', 'rev' => substr(md5_file(__FILE__), 0, 12)] : ['state' => 'gone']);
 }
 
 if ($a === 'img') {

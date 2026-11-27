@@ -189,6 +189,20 @@ test("worker finishes cleanup instead of rendering a finished job again", { skip
   assert.equal(w.runs().length, 0, "no render");
 });
 
+test("worker keeps a result a dead run left next to a claim once re-rendering is too late", { skip: skipW }, async () => {
+  const t = Math.floor(Date.now() / 1000);
+  const w = await worker((files) => {
+    job(files, "kept", "racer", t - 700);
+    files.set("targi-jobs/kept.work", { body: Buffer.from("1"), mtime: t - 500 });
+    files.set("targi-jobs/kept.out.jpg", { body: photo, mtime: t - 450 });
+  });
+  const done = await until(() => finished(w.cp.files, "kept"), 15000);
+  w.stop();
+  assert.ok(done, "claim and photo removed: " + [...w.cp.files.keys()].join(", "));
+  assert.ok(w.cp.files.has("targi-jobs/kept.out.jpg") && !w.cp.files.has("targi-jobs/kept.err"), "the portrait is not turned into an error");
+  assert.equal(w.runs().length, 0, "no render");
+});
+
 test("worker drops photos the visitor stopped waiting for", { skip: skipW }, async () => {
   const t = Math.floor(Date.now() / 1000);
   const w = await worker((files) => {
