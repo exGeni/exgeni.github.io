@@ -1,7 +1,7 @@
-import english from './i18n/en.mjs?v=7';
-import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=7';
-import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=7';
-import { percentLabel } from './lib/stats.mjs?v=7';
+import english from './i18n/en.mjs?v=8';
+import { formatDate, LANGUAGES, monthLabel, pickLanguage, translator } from './lib/i18n.mjs?v=8';
+import { cumulative, cumulativeLabelIndexes, viewModel, visibleMonths } from './lib/view.mjs?v=8';
+import { percentLabel } from './lib/stats.mjs?v=8';
 
 const el = id => document.getElementById(id);
 const narrow = window.matchMedia('(max-width: 620px)');
@@ -10,6 +10,7 @@ let activeLang = 'en';
 let t = translator('en', null, english);
 let model = null;
 let failed = false;
+let languageRequest = 0;
 
 function node(tag, className, text) {
   const element = document.createElement(tag);
@@ -204,7 +205,8 @@ function foldDetails() {
 
 /** Repaints the page in one language. Returns false when the dictionary cannot be loaded. */
 async function showLanguage(code) {
-  const url = `i18n/${code}.json?v=7`;
+  const request = ++languageRequest;
+  const url = `i18n/${code}.json?v=8`;
   try {
     let dictionary = null;
     if (code !== 'en') {
@@ -212,6 +214,7 @@ async function showLanguage(code) {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       dictionary = await response.json();
     }
+    if (request !== languageRequest) return null;
     activeLang = code;
     t = translator(code, dictionary, english);
     applyStrings();
@@ -220,7 +223,7 @@ async function showLanguage(code) {
     return true;
   } catch (error) {
     console.error(`dictionary failed: ${url}`, error);
-    return false;
+    return request === languageRequest ? false : null;
   }
 }
 
@@ -243,7 +246,8 @@ function onLanguageClick(event) {
   const anchor = visible.filter(element => element.getBoundingClientRect().top <= 1).pop() || visible[0];
   const offset = anchor?.getBoundingClientRect().top;
   showLanguage(code).then(shown => {
-    if (!shown) return;
+    if (shown === null) return;
+    if (!shown) { location.search = `?lang=${code}`; return; }
     history.replaceState(null, '', `?lang=${code}`);
     if (anchor) window.scrollBy({ top: anchor.getBoundingClientRect().top - offset, behavior: 'instant' });
   });

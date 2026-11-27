@@ -56,7 +56,7 @@ spacing:
 
 ## Colors
 
-**Strategy:** Restrained — a cool neutral base carries the long-form content, with blue for navigation and data, teal for adopted outcomes, and amber for reviewed work.
+**Strategy:** Restrained — a cool neutral base carries the long-form content, with blue for navigation, data and reported work, teal for landed work, and amber for work awaiting merge.
 **Light or dark:** Light — the page is a public reading surface used alongside source links and technical records.
 Keep primary links distinct from body text. Use status color together with explicit labels. Preserve contrast for every caption and data label; do not use the pale blue-gray border colors as text.
 

@@ -2,9 +2,10 @@
 // States: unavailable, old, stale, unreviewed, months12, months24. No state: the real snapshot.
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, normalize } from 'node:path';
+import { extname, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('../', import.meta.url);
+const root = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const state = process.argv[2];
 const port = Number(process.env.PORT || 8000);
 const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json' };
@@ -21,10 +22,11 @@ function fixture(real) {
 }
 
 createServer(async (request, response) => {
-  const path = normalize(decodeURIComponent(new URL(request.url, 'http://x').pathname)).replace(/\\/g, '/').replace(/^\/+/, '') || 'index.html';
   try {
-    if (path.includes('..')) throw new Error('outside root');
-    let body = await readFile(new URL(path, root));
+    const path = decodeURIComponent(new URL(request.url, 'http://x').pathname).replace(/^\/+/, '') || 'index.html';
+    const file = resolve(root, path);
+    if (!file.startsWith(root + sep)) throw new Error('outside root');
+    let body = await readFile(file);
     if (state && path === 'data/contributions.json') {
       if (state === 'unavailable') throw new Error('unavailable fixture');
       body = JSON.stringify(fixture(JSON.parse(body)));

@@ -47,7 +47,7 @@
   "card.whatsapp-delete.title": "Przy starcie mógł zostać usunięty kanał WhatsApp użytkownika.",
   "card.whatsapp-delete.problem": "Kanał skonfigurowany bezpośrednio w OpenClaw był usuwany, gdy brakowało zmiennej środowiskowej AlphaClaw.",
   "card.whatsapp-delete.did": "Znalazłem przyczynę w kodzie synchronizacji i napisałem poprawkę: usuwane są tylko kanały należące do AlphaClaw.",
-  "card.whatsapp-delete.result": "Maintainer przyjął to w #302, zachowując moje cztery commity bez zmian.",
+  "card.whatsapp-delete.result": "Maintainer przyjął to w #302 i wskazał mnie jako współautora.",
   "card.gbrain-home.area": "Izolacja środowisk",
   "card.gbrain-home.title": "Konfiguracja mogła zapisywać do niewłaściwej bazy wiedzy.",
   "card.gbrain-home.problem": "Przy własnym GBRAIN_HOME skrypty GStack nadal czytały domyślną konfigurację.",

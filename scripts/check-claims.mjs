@@ -25,6 +25,7 @@ export async function checkCard(card, get) {
 
 export async function checkCards(cards, get, log = console.log) {
   let failed = 0;
+  let unchecked = 0;
   for (const card of cards) {
     try {
       for (const failure of await checkCard(card, get)) {
@@ -32,8 +33,13 @@ export async function checkCards(cards, get, log = console.log) {
         log(`::error::STATS_CARD: card ${card.id}: ${failure}; edit data/cards.json and the card in index.html`);
       }
     } catch (error) {
+      unchecked++;
       log(`::warning::STATS_CARD: card ${card.id} not checked: ${error.message}`);
     }
+  }
+  if (cards.length && unchecked === cards.length) {
+    failed++;
+    log('::error::STATS_CARD: no card could be checked');
   }
   return failed;
 }
@@ -47,5 +53,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     return response.json();
   };
   if (await checkCards(cards, get)) process.exitCode = 1;
-  else console.log(`Checked ${cards.length} cards.`);
+  else console.log(`Card check finished for ${cards.length} cards; warnings above name any that were skipped.`);
 }

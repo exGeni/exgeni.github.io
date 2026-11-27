@@ -90,5 +90,7 @@ test('claim check fails on a merged "awaiting" card and a wrong milestone, passe
   const failed = await checkCards(cards, async url => url.endsWith('/1') ? { state: 'closed', merged_at: 'x', milestone: null } : { merged_at: 'x' }, line => lines.push(line));
   assert.equal(failed, 2);
   assert.match(lines[0], /card wait/);
-  assert.equal(await checkCards(cards.slice(1), async () => { throw new Error('offline'); }, () => {}), 0);
+  const offlineOne = async url => { if (url.endsWith('/2')) throw new Error('offline'); return { state: 'open', milestone: { title: 'v1' } }; };
+  assert.equal(await checkCards(cards, offlineOne, () => {}), 0);
+  assert.equal(await checkCards(cards, async () => { throw new Error('offline'); }, () => {}), 1);
 });

@@ -48,7 +48,7 @@ export default {
   "card.whatsapp-delete.title": "A user's WhatsApp channel could be deleted at boot.",
   "card.whatsapp-delete.problem": "A channel set up directly in OpenClaw was removed when an AlphaClaw environment variable was absent.",
   "card.whatsapp-delete.did": "I traced it to the sync code and wrote a fix that removes only channels AlphaClaw owns.",
-  "card.whatsapp-delete.result": "The maintainer landed it in #302 with my four commits kept as they were.",
+  "card.whatsapp-delete.result": "The maintainer landed it in #302 and credited me as co-author.",
   "card.gbrain-home.area": "Environment isolation",
   "card.gbrain-home.title": "Setup could write into the wrong knowledge base.",
   "card.gbrain-home.problem": "With a custom GBRAIN_HOME, GStack helpers still read the default config.",

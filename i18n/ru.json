@@ -47,7 +47,7 @@
   "card.whatsapp-delete.title": "При запуске мог удалиться чужой канал WhatsApp.",
   "card.whatsapp-delete.problem": "Канал, настроенный прямо в OpenClaw, удалялся, если не было переменной окружения AlphaClaw.",
   "card.whatsapp-delete.did": "Нашёл причину в коде синхронизации и написал исправление: удаляются только каналы самого AlphaClaw.",
-  "card.whatsapp-delete.result": "Мейнтейнер принял это в #302, сохранив мои четыре коммита как есть.",
+  "card.whatsapp-delete.result": "Мейнтейнер принял это в #302 и указал меня соавтором.",
   "card.gbrain-home.area": "Изоляция окружений",
   "card.gbrain-home.title": "Настройка могла писать не в ту базу знаний.",
   "card.gbrain-home.problem": "При своём GBRAIN_HOME помощники GStack всё равно читали конфиг по умолчанию.",

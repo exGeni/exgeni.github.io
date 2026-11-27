@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-27T15:49:40.234Z",
+  "generated_at": "2026-11-27T15:54:19.833Z",
   "scope": [
     "garrytan/gbrain",
     "garrytan/gstack",
@@ -104,9 +104,9 @@
     }
   ],
   "adoption": {
-    "adopted": 16,
+    "adopted": 14,
     "awaiting_follow_up": 2,
-    "not_adopted": 1,
+    "not_adopted": 3,
     "not_reviewed": 0,
     "method": "Adopted means the maintainer discussion links the contribution to a landed upstream follow-up, release, or credited commit. It does not require the original contributor PR itself to be merged."
   }
