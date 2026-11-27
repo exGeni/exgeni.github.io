@@ -8,9 +8,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,6 +25,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/update-data.mjs
+      - name: Check the snapshot shape
+        run: node --test test/page.test.mjs
       - name: Commit changed snapshot
         run: |
           if ! git diff --quiet -- data/contributions.json; then
@@ -27,5 +34,10 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/contributions.json
             git commit -m "chore: refresh contribution statistics"
+            git pull --rebase
             git push
           fi
+      - name: Check that the public cards are still true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/check-claims.mjs

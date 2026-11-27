@@ -1,19 +1,27 @@
 {
-  "generated_at": "2026-11-27T15:07:46.242Z",
+  "generated_at": "2026-11-27T15:54:19.833Z",
   "scope": [
     "garrytan/gbrain",
     "garrytan/gstack",
     "garrytan/alphaclaw",
-    "openclaw/openclaw"
+    "openclaw/openclaw",
+    "moby/buildkit"
   ],
   "totals": {
     "issues": 205,
-    "pull_requests": 18,
-    "tracked_items": 223,
+    "pull_requests": 19,
+    "tracked_items": 224,
     "open_issues": 13,
     "closed_issues": 192,
-    "open_pull_requests": 0,
+    "open_pull_requests": 1,
     "closed_pull_requests": 18
+  },
+  "issue_outcomes": {
+    "total": 205,
+    "open": 13,
+    "completed": 157,
+    "not_planned": 35,
+    "other": 0
   },
   "projects": [
     {
@@ -47,50 +55,59 @@
       "issues": 7,
       "pull_requests": 0,
       "total": 7
+    },
+    {
+      "id": "buildkit",
+      "name": "BuildKit",
+      "repo": "moby/buildkit",
+      "issues": 0,
+      "pull_requests": 1,
+      "total": 1
     }
   ],
   "monthly": [
     {
-      "month": "Jun",
+      "month": "2026-06",
       "issues": 3,
       "pull_requests": 0,
       "total": 3
     },
     {
-      "month": "Jul",
+      "month": "2026-07",
       "issues": 17,
       "pull_requests": 2,
       "total": 19
     },
     {
-      "month": "Aug",
+      "month": "2026-08",
       "issues": 11,
       "pull_requests": 2,
       "total": 13
     },
     {
-      "month": "Sep",
+      "month": "2026-09",
       "issues": 22,
       "pull_requests": 4,
       "total": 26
     },
     {
-      "month": "Oct",
+      "month": "2026-10",
       "issues": 59,
       "pull_requests": 6,
       "total": 65
     },
     {
-      "month": "Nov*",
+      "month": "2026-11",
       "issues": 93,
-      "pull_requests": 4,
-      "total": 97
+      "pull_requests": 5,
+      "total": 98
     }
   ],
   "adoption": {
-    "adopted": 15,
+    "adopted": 14,
     "awaiting_follow_up": 2,
-    "not_adopted": 1,
+    "not_adopted": 3,
+    "not_reviewed": 0,
     "method": "Adopted means the maintainer discussion links the contribution to a landed upstream follow-up, release, or credited commit. It does not require the original contributor PR itself to be merged."
   }
 }

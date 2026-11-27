@@ -1,0 +1,75 @@
+[
+  {
+    "id": "memory-alert",
+    "order": 1,
+    "label": "authored_landed",
+    "issue_url": "https://github.com/garrytan/alphaclaw/issues/125",
+    "pr_url": "https://github.com/garrytan/alphaclaw/pull/132",
+    "landing_url": "https://github.com/garrytan/alphaclaw/pull/158",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "whatsapp-delete",
+    "order": 2,
+    "label": "coauthored_landed",
+    "issue_url": "https://github.com/garrytan/alphaclaw/issues/292",
+    "pr_url": "https://github.com/garrytan/alphaclaw/pull/301",
+    "landing_url": "https://github.com/garrytan/alphaclaw/pull/302",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "gbrain-home",
+    "order": 3,
+    "label": "coauthored_landed",
+    "issue_url": "https://github.com/garrytan/gstack/issues/4325",
+    "pr_url": "https://github.com/garrytan/gstack/pull/4326",
+    "landing_url": "https://github.com/garrytan/gstack/pull/4343",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "session-sources",
+    "order": 4,
+    "label": "reported_fixed",
+    "issue_url": "https://github.com/garrytan/gbrain/issues/7805",
+    "pr_url": "",
+    "landing_url": "https://github.com/garrytan/gbrain/pull/7844",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "clawhub-package",
+    "order": 5,
+    "label": "reported_fixed",
+    "issue_url": "https://github.com/garrytan/gbrain/issues/8464",
+    "pr_url": "",
+    "landing_url": "https://github.com/garrytan/gbrain/pull/8934",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "case-overwrite",
+    "order": 6,
+    "label": "reported_fixed",
+    "issue_url": "https://github.com/garrytan/gbrain/issues/2831",
+    "pr_url": "",
+    "landing_url": "https://github.com/garrytan/gbrain/pull/3119",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "plugin-load",
+    "order": 7,
+    "label": "reported_fixed",
+    "issue_url": "https://github.com/openclaw/openclaw/issues/165195",
+    "pr_url": "",
+    "landing_url": "https://github.com/openclaw/openclaw/pull/165301",
+    "checked_on": "2026-11-27"
+  },
+  {
+    "id": "buildkit-prune",
+    "order": 8,
+    "label": "awaiting_merge",
+    "issue_url": "https://github.com/moby/buildkit/issues/5436",
+    "pr_url": "https://github.com/moby/buildkit/pull/7466",
+    "landing_url": "",
+    "checked_on": "2026-11-27",
+    "milestone": "v0.36.0"
+  }
+]

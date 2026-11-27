@@ -51,12 +51,12 @@ spacing:
 **Key characteristics:**
 - A Georgia headline establishes an editorial tone.
 - Cool blue-gray surfaces keep the long page quiet and scannable.
-- Blue marks project activity and links; teal marks adopted work; amber marks reviewed work.
+- Blue marks project activity, links and reported work; teal marks landed work; amber marks work awaiting merge.
 - Contribution claims sit beside issue, pull request, or landing references.
 
 ## Colors
 
-**Strategy:** Restrained — a cool neutral base carries the long-form content, with blue for navigation and data, teal for adopted outcomes, and amber for reviewed work.
+**Strategy:** Restrained — a cool neutral base carries the long-form content, with blue for navigation, data and reported work, teal for landed work, and amber for work awaiting merge.
 **Light or dark:** Light — the page is a public reading surface used alongside source links and technical records.
 Keep primary links distinct from body text. Use status color together with explicit labels. Preserve contrast for every caption and data label; do not use the pale blue-gray border colors as text.
 
@@ -84,7 +84,7 @@ Keep panels square or nearly square. Use 1–2px radii for small marks and statu
 - **Contribution summary:** White surface, blue top rule, large serif totals, and readable muted labels.
 - **Charts:** Blue for issues and teal for pull requests; include text labels and numeric values so color is not the only signal.
 - **Contribution rows:** Keep the result and its upstream references together; use adopted and reviewed labels with their text.
-- **Status labels:** Teal for adopted outcomes and amber for reviewed work, with sufficient text contrast.
+- **Status labels:** Teal for landed work (authored or co-authored), blue for reported and fixed upstream, amber for approved and awaiting merge, with sufficient text contrast.
 
 ## Do's and Don'ts
 
@@ -107,3 +107,5 @@ Keep panels square or nearly square. Use 1–2px radii for small marks and statu
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-11-19 | Initial design system recorded | Captured from the rendered portfolio after improving text contrast, type size, and mobile link targets. |
+| 2026-11-27 | Blue status for reported work; projects and selected work before charts; three languages | A reader should see proof first and not mistake a report for authored code. |
+| 2026-11-27 | Desktop type one step larger (body 18px, labels 15px); language switches in place | The owner found the desktop text hard to read, and switching jumped to the last anchor. |

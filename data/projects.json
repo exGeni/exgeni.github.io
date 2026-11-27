@@ -1,0 +1,24 @@
+[
+  {
+    "id": "legionowo-transit",
+    "name": "Legionowo transit",
+    "open_url": "https://exgeni.github.io/legionowo-transit/",
+    "source_url": "https://github.com/exGeni/legionowo-transit",
+    "description": {
+      "en": "Free city bus departures in Legionowo, stop by stop on a map, built from the published timetables.",
+      "ru": "Бесплатные городские автобусы Легионово: отправления по остановкам на карте, по опубликованным расписаниям.",
+      "pl": "Bezpłatna komunikacja miejska w Legionowie: odjazdy z przystanków na mapie, na podstawie opublikowanych rozkładów."
+    }
+  },
+  {
+    "id": "neighbor-food",
+    "name": "Neighbor food",
+    "open_url": "https://exgeni.github.io/neighbor-food/",
+    "source_url": "https://github.com/exGeni/neighbor-food",
+    "description": {
+      "en": "Neighbours in one building share home cooking: a QR code in the entrance shows who offers or asks for what. No money. The public link is a demo with invented neighbours.",
+      "ru": "Соседи по подъезду угощают друг друга домашней едой: по QR-коду видно, кто что предлагает или просит. Без денег. По ссылке открывается демо с выдуманными соседями.",
+      "pl": "Sąsiedzi z jednej klatki dzielą się domowym jedzeniem: po zeskanowaniu kodu QR widać, kto co proponuje lub o co prosi. Bez pieniędzy. Link otwiera demo ze zmyślonymi sąsiadami."
+    }
+  }
+]

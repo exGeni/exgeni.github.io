@@ -4,136 +4,261 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f7fa">
-  <meta name="description" content="Open-source work by Evgenii Lopatin (exGeni) across AI agent infrastructure, developer tooling and automation.">
-  <title>Evgenii Lopatin — Open-source work</title>
-  <link rel="stylesheet" href="styles.css?v=activity-layout-4">
+  <meta name="description" content="Open-source work by Evgenii Lopatin (exGeni) across AI agent infrastructure, developer tooling and automation." data-i18n-attr="content:meta.description">
+  <meta property="og:title" content="Evgenii Lopatin — Open-source work">
+  <meta property="og:description" content="Open-source work by Evgenii Lopatin (exGeni) across AI agent infrastructure, developer tooling and automation.">
+  <meta property="og:url" content="https://exgeni.github.io/">
+  <title data-i18n="meta.title">Evgenii Lopatin — Open-source work</title>
+  <script>
+    // Hide the English text briefly when another language is coming; always released.
+    (function () {
+      var asked = new URLSearchParams(location.search).get('lang');
+      var lang = /^(en|ru|pl)$/.test(asked) ? asked : (navigator.languages || [navigator.language]).map(function (t) { return String(t).split('-')[0].toLowerCase(); }).filter(function (t) { return /^(en|ru|pl)$/.test(t); })[0];
+      if (lang !== 'ru' && lang !== 'pl') return;
+      document.documentElement.classList.add('i18n-hold');
+      setTimeout(function () { document.documentElement.classList.remove('i18n-hold'); }, 1500);
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
   <header class="site-header wrap">
-    <a class="identity" href="#top" aria-label="Evgenii Lopatin home">
+    <a class="identity" href="#top" aria-label="Evgenii Lopatin home" data-i18n-attr="aria-label:aria.home">
       <span class="identity-mark">e<span>.</span></span>
       <span><strong>Evgenii Lopatin</strong><small>@exGeni</small></span>
     </a>
-    <nav aria-label="Main navigation">
-      <a href="#work">Selected work</a>
-      <a href="#approach">Approach</a>
-      <a class="nav-github" href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub profile <span aria-hidden="true">↗</span></a>
+    <div class="lang-switch" aria-label="Language" data-i18n-attr="aria-label:aria.lang" role="group"><a href="?lang=en" lang="en" data-lang="en">EN</a><a href="?lang=ru" lang="ru" data-lang="ru">RU</a><a href="?lang=pl" lang="pl" data-lang="pl">PL</a></div>
+    <nav aria-label="Main navigation" data-i18n-attr="aria-label:aria.nav">
+      <a href="#projects" data-i18n="nav.projects">Projects</a>
+      <a href="#work" data-i18n="nav.work">Selected work</a>
+      <a class="nav-approach" href="#approach" data-i18n="nav.approach">Approach</a>
+      <a class="nav-github" href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub ↗</a>
     </nav>
   </header>
 
   <main id="top">
     <section class="hero wrap">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="status-dot"></span> Independent open-source contributor</p>
-        <h1>Making AI systems<br><em>more dependable.</em></h1>
-        <p class="hero-intro">I investigate failures across agent infrastructure and developer tools, trace them to their source, and work with maintainers to get practical fixes into upstream releases.</p>
+        <p class="eyebrow"><span class="status-dot"></span> <span data-i18n="hero.eyebrow">Independent open-source contributor</span></p>
+        <h1><span data-i18n="hero.title1">Making AI systems</span><br><em data-i18n="hero.title2">more dependable.</em></h1>
+        <p data-i18n="hero.intro" class="hero-intro">I'm Evgenii Lopatin. I find failures in AI agent infrastructure and developer tools, trace them to their source and work with maintainers to get fixes upstream.</p>
+        <p class="hero-agents"><span data-i18n="hero.agents">Much of it comes from long hours of working with coding agents.</span> <a class="text-link" href="#approach" data-i18n="hero.agentsLink">How I work</a></p>
         <div class="hero-links">
-          <a class="text-link" href="#work">Explore selected work <span aria-hidden="true">↓</span></a>
+          <a class="text-link" href="#work" data-i18n="hero.explore">Explore selected work ↓</a>
           <a class="quiet-link" href="https://github.com/exGeni" target="_blank" rel="noreferrer">github.com/exGeni ↗</a>
         </div>
       </div>
-      <aside class="hero-ledger" aria-label="Contribution summary">
-        <div class="ledger-top"><span>Upstream activity</span><span class="live-mark">Snapshot · 18 Nov 2026</span></div>
-        <div class="big-stat"><strong id="total-items">207</strong><span>tracked items<br>across four projects</span></div>
+      <aside class="hero-ledger" aria-label="Contribution summary" data-i18n-attr="aria-label:aria.summary">
+        <div class="ledger-top"><span data-i18n="ledger.title">Upstream activity</span><span class="live-mark" id="snapshot-date"></span></div>
+        <div class="big-stat"><strong id="total-items" data-figure>–</strong><span data-i18n-count="ledger.tracked" data-count-of="total-items">issues and pull requests</span></div>
         <div class="ledger-rule"></div>
-        <div class="stat-pair"><div><strong id="issue-total">189</strong><span>Issues</span></div><div><strong id="pr-total">18</strong><span>Pull requests</span></div></div>
-        <div class="adoption-line"><span class="adoption-number" id="adopted-total">15</span><span>PR contributions adopted upstream through maintainer follow-ups</span></div>
+        <div class="stat-pair"><div><strong id="completed-total" data-figure>–</strong><span data-i18n="ledger.completed">Issues closed as completed</span></div><div><strong id="adopted-total" data-figure>–</strong><span data-i18n-count="ledger.adopted" data-count-of="adopted-total">PR contributions adopted upstream through maintainer follow-ups</span></div></div>
+        <p class="issues-line" id="issues-line"></p>
+        <p class="data-notice" id="data-notice" role="status" hidden></p>
+        <noscript><p class="data-notice"><span data-i18n="noscript">Live figures need JavaScript. The full public record is on GitHub:</span> <a href="https://github.com/exGeni">github.com/exGeni</a></p></noscript>
       </aside>
     </section>
 
-    <section class="activity-section">
-      <div class="wrap activity-grid">
-        <div class="section-intro">
-          <p class="eyebrow">The work, over time</p>
-          <h2>Activity is<br>building.</h2>
-          <p>Issue reports and pull requests opened each month. November is month-to-date.</p>
-          <div class="mini-legend"><span><i class="legend-issue"></i> Issues</span><span><i class="legend-pr"></i> Pull requests</span></div>
-        </div>
-        <div class="chart-panel">
-          <div class="chart-heading"><span>Monthly activity</span><span class="chart-period">Jun — Nov 2026</span></div>
-          <div id="monthly-chart" class="monthly-chart" role="img" aria-label="Stacked monthly bar chart of issues and pull requests"></div>
-          <div class="chart-foot"><span>Issues + pull requests opened</span><span>Nov 2026 through the 18th</span></div>
-          <div class="cumulative-block"><div class="chart-heading"><span>Cumulative activity</span><strong id="cumulative-total">207</strong></div><div id="cumulative-chart" class="cumulative-chart" role="img" aria-label="Cumulative contribution activity over time"></div></div>
-        </div>
+    <section id="projects" class="wrap projects-section">
+      <div class="section-heading-row"><div><p data-i18n="projects.eyebrow" class="eyebrow">My open-source projects</p><h2 data-i18n="projects.title">Things I build.</h2></div></div>
+      <div class="project-list">
+          <article class="project-card" data-project="legionowo-transit">
+            <h3>Legionowo transit</h3>
+            <p data-i18n="project.legionowo-transit">Free city bus departures in Legionowo, stop by stop on a map, built from the published timetables.</p>
+            <div class="case-links"><a href="https://exgeni.github.io/legionowo-transit/" target="_blank" rel="noreferrer" data-i18n="projects.open">Open</a><a href="https://github.com/exGeni/legionowo-transit" target="_blank" rel="noreferrer" data-i18n="projects.source">Source</a></div>
+          </article>
+          <article class="project-card" data-project="neighbor-food">
+            <h3>Neighbor food</h3>
+            <p data-i18n="project.neighbor-food">Neighbours in one building share home cooking: a QR code in the entrance shows who offers or asks for what. No money. The public link is a demo with invented neighbours.</p>
+            <div class="case-links"><a href="https://exgeni.github.io/neighbor-food/" target="_blank" rel="noreferrer" data-i18n="projects.open">Open</a><a href="https://github.com/exGeni/neighbor-food" target="_blank" rel="noreferrer" data-i18n="projects.source">Source</a></div>
+          </article>
       </div>
-    </section>
-
-    <section class="wrap metrics-section" aria-label="Contribution outcomes">
-      <div class="metric-block"><span class="metric-label">Adopted upstream</span><strong id="adopted-metric">15</strong><small>confirmed in maintainer discussions</small></div>
-      <div class="metric-block"><span class="metric-label">Awaiting follow-up</span><strong id="awaiting-metric">2</strong><small>maintainer work planned or in progress</small></div>
-      <div class="metric-block"><span class="metric-label">Open issues</span><strong id="open-issues">36</strong><small>across the four repositories</small></div>
-      <div class="metric-block"><span class="metric-label">Open pull requests</span><strong id="open-prs">1</strong><small>currently under maintainer review</small></div>
-    </section>
-
-    <section class="wrap outcomes-section" aria-label="Pull request outcomes">
-      <div class="outcomes-heading"><span>Pull request outcomes</span><span id="outcome-summary">15 adopted · 2 awaiting follow-up · 1 not adopted</span></div>
-      <div id="outcome-track" class="outcome-track" aria-label="15 adopted, 2 awaiting follow-up, 1 not adopted"><i id="outcome-adopted" class="outcome-adopted"></i><i id="outcome-awaiting" class="outcome-awaiting"></i><i id="outcome-not-adopted" class="outcome-not-adopted"></i></div>
-      <div class="outcome-legend"><span><i class="legend-adopted"></i> Adopted upstream</span><span><i class="legend-awaiting"></i> Awaiting follow-up</span><span><i class="legend-not-adopted"></i> Not adopted</span></div>
-    </section>
-
-    <section class="wrap distribution-section">
-      <div class="distribution-copy">
-        <p class="eyebrow">Where I contribute</p>
-        <h2>Four projects.<br>Connected problems.</h2>
-        <p>The work sits where agent runtimes, memory systems, developer workflows and integrations meet.</p>
-      </div>
-      <div class="distribution-chart">
-        <div class="chart-heading"><span>Items by project</span><span class="chart-period">Issues + PRs</span></div>
-        <div id="project-chart" class="project-chart" role="img" aria-label="Horizontal bars showing contribution totals by project"></div>
-      </div>
-    </section>
-
-    <section class="wrap domains-section">
-      <div class="section-heading-row"><div><p class="eyebrow">Areas of work</p><h2>What the contributions address</h2></div><p class="heading-note">Grouped by problem domain, not by tool.</p></div>
-      <div class="domain-list">
-        <article class="domain-row"><span class="domain-index">01</span><div><h3>Reliability & resource measurement</h3><p>Monitoring, process lifecycle, memory pressure and failure handling.</p></div><a class="domain-project" href="https://github.com/garrytan/alphaclaw" target="_blank" rel="noreferrer">AlphaClaw ↗</a></article>
-        <article class="domain-row"><span class="domain-index">02</span><div><h3>State, memory & data integrity</h3><p>Source boundaries, migrations, session attribution and safe synchronization.</p></div><a class="domain-project" href="https://github.com/garrytan/gbrain" target="_blank" rel="noreferrer">GBrain ↗</a></article>
-        <article class="domain-row"><span class="domain-index">03</span><div><h3>Agent workflows & environment boundaries</h3><p>Tool orchestration, configuration isolation and predictable developer workflows.</p></div><a class="domain-project" href="https://github.com/garrytan/gstack" target="_blank" rel="noreferrer">GStack ↗</a></article>
-        <article class="domain-row"><span class="domain-index">04</span><div><h3>Performance investigation</h3><p>Reproducible profiling, regression analysis and evidence-led issue reports.</p></div><a class="domain-project" href="https://github.com/openclaw/openclaw" target="_blank" rel="noreferrer">OpenClaw ↗</a></article>
-      </div>
+      <p class="all-links"><span data-i18n="projects.all">Everything public under my name, my own projects included:</span> <a href="https://github.com/search?q=author%3AexGeni+is%3Apublic&amp;type=issues" target="_blank" rel="noreferrer" data-i18n="projects.allIssues">All issues ↗</a> <a href="https://github.com/search?q=author%3AexGeni+is%3Apublic&amp;type=pullrequests" target="_blank" rel="noreferrer" data-i18n="projects.allPulls">All pull requests ↗</a></p>
     </section>
 
     <section id="work" class="work-section">
       <div class="wrap">
-        <div class="section-heading-row work-heading"><div><p class="eyebrow">Selected contributions</p><h2>Problems worth fixing.</h2></div><p class="heading-note">A selection of upstream work with concrete evidence and outcomes.</p></div>
+        <div class="section-heading-row work-heading"><div><p data-i18n="work.eyebrow" class="eyebrow">Selected contributions</p><h2 data-i18n="work.title">Problems worth fixing.</h2></div><p data-i18n="work.note" class="heading-note">Each entry says exactly what happened, with links.</p></div>
         <div class="case-list">
-          <article class="case-row">
-            <div class="case-meta"><span class="case-area">Resource monitoring</span><span class="case-project">AlphaClaw</span><span class="case-status adopted">Adopted upstream</span></div>
-            <div class="case-content"><h3>A false critical-memory alert, traced to page cache.</h3><p>The watchdog treated inactive page cache as active container pressure: the same cgroup read 93.8% used while its working set was 54.3%. I documented the measurement, proposed the correct cgroup metric and submitted the regression-tested change.</p><div class="case-result">The maintainer ported the change unchanged to <a href="https://github.com/garrytan/alphaclaw/pull/158" target="_blank" rel="noreferrer">#158</a>, shipped in v0.10.19, with credit.</div><div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/125" target="_blank" rel="noreferrer">Issue #125 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/132" target="_blank" rel="noreferrer">My PR #132 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/158" target="_blank" rel="noreferrer">Landed #158 ↗</a></div></div>
+          <article class="case-row" data-card="memory-alert">
+            <div class="case-meta"><span data-i18n="card.memory-alert.area" class="case-area">Resource monitoring</span><span class="case-project">AlphaClaw</span><span data-i18n="label.authored_landed" class="case-status authored_landed">Authored, landed</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.memory-alert.title">A false critical-memory alert, traced to page cache.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.memory-alert.problem">The watchdog counted inactive page cache as used memory: a container showed about 94% while its working set was about 54%.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.memory-alert.did">I measured it on a live deployment, proposed the working-set metric and wrote the change.</span></p>
+              </details>
+              <div data-i18n="card.memory-alert.result" class="case-result">The maintainer ported my change unchanged in #158, shipped in v0.10.19.</div>
+              <div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/125" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #125 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/132" target="_blank" rel="noreferrer"><span data-i18n="link.mine">My PR</span> #132 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/158" target="_blank" rel="noreferrer"><span data-i18n="link.landed">Landed</span> #158 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
           </article>
-          <article class="case-row">
-            <div class="case-meta"><span class="case-area">State migration</span><span class="case-project">AlphaClaw</span><span class="case-status adopted">Adopted upstream</span></div>
-            <div class="case-content"><h3>Restoring access to credentials after an upstream schema migration.</h3><p>OpenClaw moved the shared auth store into <code>config_machine_state</code> at schema v13, while AlphaClaw still queried tables that had been dropped. The result: credentials appeared disconnected and writes failed. I mapped the schema boundary and proposed a fail-closed, version-aware read/write path.</p><div class="case-result">The reliability wave delivered the fix in <a href="https://github.com/garrytan/alphaclaw/pull/114" target="_blank" rel="noreferrer">#114</a>, with schema-aware and concurrency coverage.</div><div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/88" target="_blank" rel="noreferrer">Issue #88 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/89" target="_blank" rel="noreferrer">My PR #89 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/114" target="_blank" rel="noreferrer">Landed #114 ↗</a></div></div>
+          <article class="case-row" data-card="whatsapp-delete">
+            <div class="case-meta"><span data-i18n="card.whatsapp-delete.area" class="case-area">Channel ownership</span><span class="case-project">AlphaClaw</span><span data-i18n="label.coauthored_landed" class="case-status coauthored_landed">Co-authored, landed</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.whatsapp-delete.title">A user's WhatsApp channel could be deleted at boot.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.whatsapp-delete.problem">A channel set up directly in OpenClaw was removed when an AlphaClaw environment variable was absent.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.whatsapp-delete.did">I traced it to the sync code and wrote a fix that removes only channels AlphaClaw owns.</span></p>
+              </details>
+              <div data-i18n="card.whatsapp-delete.result" class="case-result">The maintainer landed it in #302 and credited me as co-author.</div>
+              <div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/292" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #292 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/301" target="_blank" rel="noreferrer"><span data-i18n="link.mine">My PR</span> #301 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/302" target="_blank" rel="noreferrer"><span data-i18n="link.landed">Landed</span> #302 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
           </article>
-          <article class="case-row">
-            <div class="case-meta"><span class="case-area">Channel ownership</span><span class="case-project">AlphaClaw</span><span class="case-status adopted">Adopted upstream</span></div>
-            <div class="case-content"><h3>Preventing boot-time deletion of channels AlphaClaw did not own.</h3><p>Startup synchronization could remove a WhatsApp channel configured natively in OpenClaw when an AlphaClaw environment variable was absent. The fix made removal respect the channel's <code>sync: false</code> boundary while preserving managed-channel cleanup.</p><div class="case-result">Four original commits landed in <a href="https://github.com/garrytan/alphaclaw/pull/302" target="_blank" rel="noreferrer">#302</a>; the maintainer credited the contribution.</div><div class="case-links"><a href="https://github.com/garrytan/alphaclaw/issues/292" target="_blank" rel="noreferrer">Issue #292 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/301" target="_blank" rel="noreferrer">My PR #301 ↗</a><a href="https://github.com/garrytan/alphaclaw/pull/302" target="_blank" rel="noreferrer">Landed #302 ↗</a></div></div>
+          <article class="case-row" data-card="gbrain-home">
+            <div class="case-meta"><span data-i18n="card.gbrain-home.area" class="case-area">Environment isolation</span><span class="case-project">GStack</span><span data-i18n="label.coauthored_landed" class="case-status coauthored_landed">Co-authored, landed</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.gbrain-home.title">Setup could write into the wrong knowledge base.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.gbrain-home.problem">With a custom GBRAIN_HOME, GStack helpers still read the default config.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.gbrain-home.did">I found it, wrote the fix and tests, and showed the behaviour before and after.</span></p>
+              </details>
+              <div data-i18n="card.gbrain-home.result" class="case-result">The maintainers rebuilt it in #4343, merged it and credited me as co-author.</div>
+              <div class="case-links"><a href="https://github.com/garrytan/gstack/issues/4325" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #4325 ↗</a><a href="https://github.com/garrytan/gstack/pull/4326" target="_blank" rel="noreferrer"><span data-i18n="link.mine">My PR</span> #4326 ↗</a><a href="https://github.com/garrytan/gstack/pull/4343" target="_blank" rel="noreferrer"><span data-i18n="link.landed">Landed</span> #4343 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
           </article>
-          <article class="case-row">
-            <div class="case-meta"><span class="case-area">Environment isolation</span><span class="case-project">GStack</span><span class="case-status adopted">Adopted upstream</span></div>
-            <div class="case-content"><h3>Making GStack respect a non-default GBrain home.</h3><p>Two GStack helpers read configuration from <code>$HOME/.gbrain</code> instead of resolving <code>GBRAIN_HOME</code>. On machines with a separately located brain, this could route setup and synchronization to the wrong configuration.</p><div class="case-result">The maintainer rebuilt the fix in <a href="https://github.com/garrytan/gstack/pull/4343" target="_blank" rel="noreferrer">#4343</a>, merged it and credited me as co-author.</div><div class="case-links"><a href="https://github.com/garrytan/gstack/issues/4325" target="_blank" rel="noreferrer">Issue #4325 ↗</a><a href="https://github.com/garrytan/gstack/pull/4326" target="_blank" rel="noreferrer">My PR #4326 ↗</a><a href="https://github.com/garrytan/gstack/pull/4343" target="_blank" rel="noreferrer">Landed #4343 ↗</a></div></div>
+          <article class="case-row" data-card="session-sources">
+            <div class="case-meta"><span data-i18n="card.session-sources.area" class="case-area">Data boundaries</span><span class="case-project">GBrain</span><span data-i18n="label.reported_fixed" class="case-status reported_fixed">Reported, fixed upstream</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.session-sources.title">Private session content could cross into another source.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.session-sources.problem">On a brain with several sources, background synthesis wrote every captured session's pages into one source.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.session-sources.did">I traced capture and synthesis through the code and reported it with three possible designs.</span></p>
+              </details>
+              <div data-i18n="card.session-sources.result" class="case-result">Fixed in the privacy hotfix #7844; the changelog names me as a reporter.</div>
+              <div class="case-links"><a href="https://github.com/garrytan/gbrain/issues/7805" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #7805 ↗</a><a href="https://github.com/garrytan/gbrain/pull/7844" target="_blank" rel="noreferrer"><span data-i18n="link.fix">Fix</span> #7844 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
           </article>
-          <article class="case-row">
-            <div class="case-meta"><span class="case-area">Session attribution</span><span class="case-project">GBrain</span><span class="case-status adopted">Adopted upstream</span></div>
-            <div class="case-content"><h3>Distinguishing the owner's Remote Control session from agent work.</h3><p>Claude Code Remote Control sessions could be classified as agent-launched, corrupting the attribution of captured activity. The fix stops detection at the Remote Control process while preserving worker-session attribution.</p><div class="case-result">Rebuilt in GBrain fix wave <a href="https://github.com/garrytan/gbrain/pull/8971" target="_blank" rel="noreferrer">#8971</a>, then shipped to master with contributor credit.</div><div class="case-links"><a href="https://github.com/garrytan/gbrain/issues/8080" target="_blank" rel="noreferrer">Issue #8080 ↗</a><a href="https://github.com/garrytan/gbrain/pull/8892" target="_blank" rel="noreferrer">My PR #8892 ↗</a><a href="https://github.com/garrytan/gbrain/pull/8971" target="_blank" rel="noreferrer">Landed #8971 ↗</a></div></div>
+          <article class="case-row" data-card="clawhub-package">
+            <div class="case-meta"><span data-i18n="card.clawhub-package.area" class="case-area">Supply chain</span><span class="case-project">GBrain</span><span data-i18n="label.reported_fixed" class="case-status reported_fixed">Reported, fixed upstream</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.clawhub-package.title">A documented package of unclear ownership.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.clawhub-package.problem">The ClawHub package that the documentation pointed to did not install.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.clawhub-package.did">I reproduced the failure, inspected the registry and reported that the ownership was unclear.</span></p>
+              </details>
+              <div data-i18n="card.clawhub-package.result" class="case-result">The maintainers' fix #8934 found that an upgrade could install an unrelated account's package, removed that path and named me as the reporter of the ownership.</div>
+              <div class="case-links"><a href="https://github.com/garrytan/gbrain/issues/8464" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #8464 ↗</a><a href="https://github.com/garrytan/gbrain/pull/8934" target="_blank" rel="noreferrer"><span data-i18n="link.fix">Fix</span> #8934 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
           </article>
-          <article class="case-row">
-            <div class="case-meta"><span class="case-area">Performance profiling</span><span class="case-project">OpenClaw</span><span class="case-status reviewed">P1 issue · reviewed</span></div>
-            <div class="case-content"><h3>Tracing a plugin-loading regression measured in minutes.</h3><p>A reproducible report isolated repeated linear scans in native plugin namespace lookup. On OpenClaw 2026.9.8, the reported profile attributed 148 seconds of self time to the lookup; adding native prebuilds increased a slim plugin's load time from about 39 to 239 seconds.</p><div class="case-result">The issue received a P1 rating and a focused repair recommendation. I do not count it as fixed: the available record does not confirm a landed implementation.</div><div class="case-links"><a href="https://github.com/openclaw/openclaw/issues/165195" target="_blank" rel="noreferrer">Issue #165195 ↗</a></div></div>
+          <article class="case-row" data-card="case-overwrite">
+            <div class="case-meta"><span data-i18n="card.case-overwrite.area" class="case-area">Data integrity</span><span class="case-project">GBrain</span><span data-i18n="label.reported_fixed" class="case-status reported_fixed">Reported, fixed upstream</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.case-overwrite.title">A save could silently overwrite another file.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.case-overwrite.problem">On Windows and macOS a file whose name differed only in letter case was destroyed.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.case-overwrite.did">I reproduced it live, found the missing guard and reported it.</span></p>
+              </details>
+              <div data-i18n="card.case-overwrite.result" class="case-result">Fixed in #3119, written by another contributor.</div>
+              <div class="case-links"><a href="https://github.com/garrytan/gbrain/issues/2831" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #2831 ↗</a><a href="https://github.com/garrytan/gbrain/pull/3119" target="_blank" rel="noreferrer"><span data-i18n="link.fix">Fix</span> #3119 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
+          </article>
+          <article class="case-row" data-card="plugin-load">
+            <div class="case-meta"><span data-i18n="card.plugin-load.area" class="case-area">Performance</span><span class="case-project">OpenClaw</span><span data-i18n="label.reported_fixed" class="case-status reported_fixed">Reported, fixed upstream</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.plugin-load.title">Plugin loading slowed by minutes.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.plugin-load.problem">A directory of native binaries in a plugin added about 200 seconds to loading.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.plugin-load.did">I compared releases, profiled the CPU and pointed to a repeated linear scan.</span></p>
+              </details>
+              <div data-i18n="card.plugin-load.result" class="case-result">Fixed in #165301, written by another contributor, which indexes that lookup.</div>
+              <div class="case-links"><a href="https://github.com/openclaw/openclaw/issues/165195" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #165195 ↗</a><a href="https://github.com/openclaw/openclaw/pull/165301" target="_blank" rel="noreferrer"><span data-i18n="link.fix">Fix</span> #165301 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
+          </article>
+          <article class="case-row" data-card="buildkit-prune">
+            <div class="case-meta"><span data-i18n="card.buildkit-prune.area" class="case-area">Build cache</span><span class="case-project">BuildKit</span><span data-i18n="label.awaiting_merge" class="case-status awaiting_merge">Approved, awaiting merge</span></div>
+            <div class="case-content">
+              <h3 data-i18n="card.buildkit-prune.title">Cache cleanup kept old layers after a restart.</h3>
+              <details class="case-details" open><summary data-i18n="card.details">Details</summary>
+                <p><strong data-i18n="card.problem">Problem</strong> <span data-i18n="card.buildkit-prune.problem">Pruning marked parent layers as just used, so age-based cleanup skipped them.</span></p>
+                <p><strong data-i18n="card.did">What I did</strong> <span data-i18n="card.buildkit-prune.did">I reproduced a long-open report, found the restart condition and fixed four calls, with a test.</span></p>
+              </details>
+              <div data-i18n="card.buildkit-prune.result" class="case-result">Approved by a maintainer and open, milestone v0.36.0. Not merged yet.</div>
+              <div class="case-links"><a href="https://github.com/moby/buildkit/issues/5436" target="_blank" rel="noreferrer"><span data-i18n="link.issue">Issue</span> #5436 ↗</a><a href="https://github.com/moby/buildkit/pull/7466" target="_blank" rel="noreferrer"><span data-i18n="link.mine">My PR</span> #7466 ↗</a></div>
+              <p class="case-checked"><span data-i18n="card.checked">Checked on</span> <time datetime="2026-11-27">27 November 2026</time></p>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="approach" class="wrap approach-section">
-      <div><p class="eyebrow">How I contribute</p><h2>Evidence before<br>assumptions.</h2></div>
-      <div class="approach-copy"><p>I focus on problems that cross component boundaries: a configuration contract that drifts, a state migration that breaks a consumer, or a runtime path whose cost is invisible until measured.</p><ol><li><span>01</span> Reproduce the behaviour in a real or isolated environment.</li><li><span>02</span> Trace the contract across code, configuration and runtime.</li><li><span>03</span> Quantify impact and submit a focused report or patch.</li><li><span>04</span> Verify the outcome with maintainers and follow the change upstream.</li></ol></div>
+    <section class="activity-section" data-section="monthly">
+      <div class="wrap activity-grid">
+        <div class="section-intro">
+          <p data-i18n="activity.eyebrow" class="eyebrow">The work, over time</p>
+          <h2 data-i18n="activity.title">Activity over time.</h2>
+          <p data-i18n="activity.note">Issue reports and pull requests opened each month.</p>
+          <div class="mini-legend"><span class="legend-issue-item"><i class="legend-issue"></i> <span data-i18n="legend.issues">Issues</span></span><span class="legend-pr-item"><i class="legend-pr"></i> <span data-i18n="legend.pulls">Pull requests</span></span></div>
+        </div>
+        <div class="chart-panel">
+          <p class="data-notice section-notice" hidden></p>
+          <div class="section-body">
+            <div class="chart-heading"><span data-i18n="activity.monthly">Monthly activity</span><span class="chart-period" id="chart-period"></span></div>
+            <div id="monthly-chart" class="monthly-chart" role="img" aria-label="Stacked monthly bar chart of issues and pull requests" data-i18n-attr="aria-label:aria.monthly"></div>
+            <div class="chart-foot"><span id="monthly-foot"></span><span id="through-date"></span></div>
+            <div class="cumulative-block"><div class="chart-heading"><span data-i18n="activity.cumulative">Cumulative activity</span><strong id="cumulative-total"></strong></div><div id="cumulative-chart" class="cumulative-chart" role="img" aria-label="Cumulative contribution activity over time" data-i18n-attr="aria-label:aria.cumulative"></div><div id="cumulative-labels" class="cumulative-labels" aria-hidden="true"></div></div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="method-note"><div class="wrap method-inner"><p><strong>How the numbers are counted.</strong> The activity totals include authored issues and pull requests in the four listed upstream repositories, based on their GitHub creation dates. “Adopted upstream” is a separate, manually verified outcome: it includes maintainer follow-up PRs, fix waves and credited commits when the original PR was closed as superseded. Closed does not automatically mean accepted. November activity is through 18 November 2026.</p><a href="https://github.com/exGeni" target="_blank" rel="noreferrer">View the full public record on GitHub ↗</a></div></section>
+    <section class="wrap metrics-section" aria-label="Contribution outcomes" data-i18n-attr="aria-label:aria.metrics">
+      <div class="metric-block"><span data-i18n="metric.adopted" class="metric-label">Adopted upstream</span><strong id="adopted-metric" data-figure>–</strong><small data-i18n="metric.adoptedNote">confirmed in maintainer discussions</small></div>
+      <div class="metric-block"><span data-i18n="metric.awaiting" class="metric-label">Awaiting follow-up</span><strong id="awaiting-metric" data-figure>–</strong><small data-i18n="metric.awaitingNote">not landed yet</small></div>
+      <div class="metric-block"><span data-i18n="metric.openIssues" class="metric-label">Open issues</span><strong id="open-issues" data-figure>–</strong><small data-i18n="metric.openIssuesNote">in the counted repositories</small></div>
+      <div class="metric-block"><span data-i18n="metric.openPulls" class="metric-label">Open pull requests</span><strong id="open-prs" data-figure>–</strong><small data-i18n="metric.openPullsNote">not merged or closed</small></div>
+    </section>
+
+    <section class="wrap outcomes-section" data-section="outcomes" aria-label="Pull request outcomes" data-i18n-attr="aria-label:aria.outcomes">
+      <p class="data-notice section-notice" hidden></p>
+      <div class="section-body">
+        <div class="outcomes-heading"><span data-i18n="outcomes.title">Pull request outcomes</span><span id="outcome-summary"></span></div>
+        <div id="outcome-track" class="outcome-track" role="img"><i id="outcome-adopted" class="outcome-adopted"></i><i id="outcome-awaiting" class="outcome-awaiting"></i><i id="outcome-not-adopted" class="outcome-not-adopted"></i><i id="outcome-not-reviewed" class="outcome-not-reviewed" hidden></i></div>
+        <div class="outcome-legend"><span class="legend-adopted-item"><i class="legend-adopted"></i> <span data-i18n="outcomes.adopted">Adopted upstream</span></span><span class="legend-awaiting-item"><i class="legend-awaiting"></i> <span data-i18n="outcomes.awaiting">Awaiting follow-up</span></span><span class="legend-not-adopted-item"><i class="legend-not-adopted"></i> <span data-i18n="outcomes.notAdopted">Not adopted</span></span><span class="legend-not-reviewed-item"><i class="legend-not-reviewed"></i> <span data-i18n="outcomes.notReviewed">Not yet reviewed</span></span></div>
+      </div>
+    </section>
+
+    <section class="wrap distribution-section" data-section="projects">
+      <div class="distribution-copy">
+        <p data-i18n="dist.eyebrow" class="eyebrow">Where I contribute</p>
+        <h2><span id="projects-count"></span> <span data-i18n="dist.title">Connected problems.</span></h2>
+        <p data-i18n="dist.note">The work sits where agent runtimes, memory systems, developer workflows and integrations meet.</p>
+      </div>
+      <div class="distribution-chart">
+        <p class="data-notice section-notice" hidden></p>
+        <div class="section-body">
+          <div class="chart-heading"><span data-i18n="dist.heading">Items by project</span><span data-i18n="dist.period" class="chart-period">Issues + PRs</span></div>
+          <div id="project-chart" class="project-chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap domains-section">
+      <div class="section-heading-row"><div><p data-i18n="areas.eyebrow" class="eyebrow">Areas of work</p><h2 data-i18n="areas.title">What the contributions address</h2></div><p data-i18n="areas.note" class="heading-note">Grouped by problem domain, not by tool.</p></div>
+      <div class="domain-list">
+        <article class="domain-row"><span class="domain-index">01</span><div><h3 data-i18n="area.0.title">Reliability &amp; resource measurement</h3><p data-i18n="area.0.note">Monitoring, process lifecycle, memory pressure and failure handling.</p></div><a class="domain-project" href="https://github.com/garrytan/alphaclaw" target="_blank" rel="noreferrer">AlphaClaw ↗</a></article>
+        <article class="domain-row"><span class="domain-index">02</span><div><h3 data-i18n="area.1.title">State, memory &amp; data integrity</h3><p data-i18n="area.1.note">Source boundaries, migrations, session attribution and safe synchronization.</p></div><a class="domain-project" href="https://github.com/garrytan/gbrain" target="_blank" rel="noreferrer">GBrain ↗</a></article>
+        <article class="domain-row"><span class="domain-index">03</span><div><h3 data-i18n="area.2.title">Agent workflows &amp; environment boundaries</h3><p data-i18n="area.2.note">Tool orchestration, configuration isolation and predictable developer workflows.</p></div><a class="domain-project" href="https://github.com/garrytan/gstack" target="_blank" rel="noreferrer">GStack ↗</a></article>
+        <article class="domain-row"><span class="domain-index">04</span><div><h3 data-i18n="area.3.title">Performance investigation</h3><p data-i18n="area.3.note">Reproducible profiling, regression analysis and evidence-led issue reports.</p></div><a class="domain-project" href="https://github.com/openclaw/openclaw" target="_blank" rel="noreferrer">OpenClaw ↗</a></article>
+        <article class="domain-row"><span class="domain-index">05</span><div><h3 data-i18n="area.4.title">Build cache behaviour</h3><p data-i18n="area.4.note">Cache pruning and last-used tracking in the builder behind Docker.</p></div><a class="domain-project" href="https://github.com/moby/buildkit" target="_blank" rel="noreferrer">BuildKit ↗</a></article>
+      </div>
+    </section>
+
+    <section id="approach" class="wrap approach-section">
+      <div><p data-i18n="approach.eyebrow" class="eyebrow">How I contribute</p><h2 data-i18n="approach.title">Evidence before assumptions.</h2></div>
+      <div class="approach-copy"><p data-i18n="approach.intro">I focus on problems that cross component boundaries: a configuration contract that drifts, a state migration that breaks a consumer, or a runtime path whose cost is invisible until measured.</p><ol><li><span>01</span> <span data-i18n="step.0">Reproduce the behaviour in a real or isolated environment.</span></li><li><span>02</span> <span data-i18n="step.1">Trace the contract across code, configuration and runtime.</span></li><li><span>03</span> <span data-i18n="step.2">Quantify impact and submit a focused report or patch.</span></li><li><span>04</span> <span data-i18n="step.3">Verify the outcome with maintainers and follow the change upstream.</span></li></ol></div>
+    </section>
+
+    <section class="method-note"><div class="wrap method-inner"><p><strong data-i18n="method.title">How the numbers are counted.</strong> <span data-i18n="method.body">The totals include issues and pull requests I opened in the listed upstream repositories, by GitHub creation date. “Closed as completed” is GitHub's close reason, not a verified fix. “Adopted upstream” is a separate, hand-checked outcome: maintainer follow-up pull requests, fix waves and credited commits count even when my pull request was closed as superseded.</span></p><a href="https://github.com/exGeni" target="_blank" rel="noreferrer" data-i18n="method.record">View the full public record on GitHub ↗</a></div></section>
   </main>
 
-  <footer class="wrap site-footer"><div><strong>Evgenii Lopatin</strong><span>Open-source work · AI agent infrastructure · Developer tooling</span></div><a href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub ↗</a><small>© 2026</small></footer>
-  <script src="app.js" defer></script>
+  <footer class="wrap site-footer"><div><strong>Evgenii Lopatin</strong><span data-i18n="footer.tagline">Open-source work · AI agent infrastructure · Developer tooling</span></div><a href="https://github.com/exGeni" target="_blank" rel="noreferrer">GitHub ↗</a><small>© 2026</small></footer>
+  <script type="module" src="app.js?v=10"></script>
 </body>
 </html>
